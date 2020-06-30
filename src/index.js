@@ -4,6 +4,12 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
+//=====================================================================================================
+
+app.get('/temp',(req, res)=>{
+    res.render('temp')
+})
+
 app.get('/', (req, res)=>{
     res.locals.pageName = 'home';
     res.render('main', {
@@ -37,6 +43,12 @@ app.post('/course3', (req, res)=>{
     res.render('course3', req.body);
     // res.json(req.body);
 });
+
+app.get('/restaurant',(req, res)=>{
+    res.render('restaurant')
+})
+
+//=================================================================================================
 
 app.use(express.static('public'));
 
