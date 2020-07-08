@@ -26,6 +26,10 @@ app.get('/course', (req, res)=>{
 //     // res.json(req.body);
 // });
 
+app.get('/products', (req, res)=>{
+    res.render('products');
+});
+
 app.get('/restaurant',(req, res)=>{
     res.render('restaurant')
 })
