@@ -17,32 +17,14 @@ app.get('/', (req, res)=>{
     });
 });
 
-app.get('/course1', (req, res)=>{
-    res.render('course1');
+app.get('/course', (req, res)=>{
+    res.render('course');
 });
 
-app.post('/course1', (req, res)=>{
-    res.render('course1', req.body);
-    // res.json(req.body);
-});
-
-app.get('/course2', (req, res)=>{
-    res.render('course2');
-});
-
-app.post('/course2', (req, res)=>{
-    res.render('course2', req.body);
-    // res.json(req.body);
-});
-
-app.get('/course3', (req, res)=>{
-    res.render('course3');
-});
-
-app.post('/course3', (req, res)=>{
-    res.render('course3', req.body);
-    // res.json(req.body);
-});
+// app.post('/course', (req, res)=>{
+//     res.render('course1', req.body);
+//     // res.json(req.body);
+// });
 
 app.get('/restaurant',(req, res)=>{
     res.render('restaurant')
