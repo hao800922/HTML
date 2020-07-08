@@ -66,6 +66,17 @@ app.use(express.json());
 // 啟動json()
 // 將讀取資料轉換成 json
 
+app.use(session({
+    secret: 'asdadftbtbre', // 亂打一串字
+    saveUninitialized: false,
+    resave: false,
+    store: sessionStore,
+    cookie: {
+        maxAge: 1200000 // 最大閒置時間(msec)
+        // 而如果要查詢何時斷線要用req.session.coockie.expires
+    }
+}));
+
 // custom middleware----------------------------------------------------------------
 // 可以預設一些全域的變數，如果用戶修改將被取代
 app.use((req, res, next)=>{
@@ -96,6 +107,25 @@ app.get('/', (req, res) => {
     res.locals.pageName = 'home';
     res.render('main');
 });
+
+// 查詢網站登入次數-------------------------------------------
+app.get('/try-session', (req, res) => {
+    req.session.my_var = req.session.my_var || 0;
+    // 一開始my_var沒有被定義, (undefined || 0)為0, 結論my_var=0
+    req.session.my_var++;
+    // my_var++後, my_var=1, 完成第一次計數
+    //---------------------------------------------
+    // 之後則是my_var=n(正整數),(n || 0)為n
+    // my_var++後, my_var=n+1, 完成第n+1次計數
+    //---------------------------------------------
+    res.json({
+        my_ver: req.session.my_var,
+        session: req.session
+    })
+})
+// my_var公式只做在這一路由, 因此只有照訪這頁, my_var才會增加
+// 不過其他session資料是網站全域的
+//---------------------------------------------------------------
 
 // 課程部分-------------------------------------------------------------------
 app.get('/course', (req, res) => {
