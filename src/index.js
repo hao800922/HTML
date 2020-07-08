@@ -23,12 +23,12 @@ const session = require('express-session');
 // 在專案下安裝 >npm i express-session
 // ref https://www.npmjs.com/package/express-session
 
-
 const MysqlStore = require('express-mysql-session')(session);
 // 引入express-mysql-session
 // 套件express-mysql-session功能:
 // 存在記憶體的session資料, 備份到mysql上面
 // 在專案下安裝 >npm i express-mysql-session
+
 
 const moment = require('moment-timezone')
 // 引入moment-timezone
