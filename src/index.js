@@ -4,6 +4,8 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
+const db = require(__dirname + '/db_connect');
+
 //=====================================================================================================
 
 app.get('/temp',(req, res)=>{
