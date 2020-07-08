@@ -1,3 +1,13 @@
+<style>
+  /* 原來style也可以寫在body裡面 */
+  .navbar .navbar-nav .nav-item.active {
+      /* .navbar .navbar-nav 中間空格為尋找下一層的標籤  */
+      /* .nav-item.active 沒空格則是尋找標籤內 */
+      background-color: #89b8ea;
+      border-radius: 10px;
+  }
+</style>
+
 <div class='pageBK'
   style="margin: 0px; padding: 0px ; background-color:black ; height:300% ; width:100%; position:fixed; z-index:-1">
 </div>
@@ -13,10 +23,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active" style="margin-right: 10px;">
-          <a class="nav-link" href="/" style="font-size: 1.3em;">首頁 <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/" style="font-size: 1.3em;">首頁 </a>
         </li>
         <li class="nav-item " style="margin-right: 10px;">
-          <a class="nav-link" href="/course" style="font-size: 1.3em;">課程報名 <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/course" style="font-size: 1.3em;">課程報名</a>
         </li>
         <li class="nav-item " style="margin-right: 10px;">
           <a class="nav-link" href="/products" style="font-size: 1.3em;">產品資訊<span class="sr-only">(current)</span></a>
@@ -27,12 +37,21 @@
         </li>
       </ul>
       <ul class="navbar-nav">
+        <% if(sess.User) { %>
         <li class="nav-item ">
-          <a class="nav-link" href="/login" style="font-size: 1.3em;">登入 <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/login" style="font-size: 1.3em;"><%= sess.User.name %></a>
         </li>
         <li class="nav-item ">
-          <a class="nav-link" href="/register" style="font-size: 1.3em;">註冊 <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/logout" style="font-size: 1.3em;">登出</a>
         </li>
+        <% } else { %>
+        <li class="nav-item ">
+          <a class="nav-link" href="/login" style="font-size: 1.3em;">登入</a>
+        </li>
+        <li class="nav-item ">
+          <a class="nav-link" href="/register" style="font-size: 1.3em;">註冊</a>
+        </li>
+        <% } %>
 
       </ul>
 

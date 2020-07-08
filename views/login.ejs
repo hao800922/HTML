@@ -8,7 +8,7 @@
       <div class="card" style="width: 18rem ; ">
         <div class="card-body">
           <h5 class="card-title">登入</h5>
-          <form>
+          <form method="post" name="form1" onsubmit="return formCheck()">
 
             <div class="form-group">
               <label for="exampleInputEmail1">Email</label>
@@ -17,7 +17,7 @@
 
             <div class="form-group">
               <label for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" id="Password" name="Password">
+              <input type="password" class="form-control" id="password" name="password">
             </div>
 
             <button type="submit" class="btn btn-primary">登入</button>
@@ -30,4 +30,17 @@
   
 
 <%- include('parts/scripts') %>
+<script>
+  function formCheck() {
+      // Ajax
+      $.post('/login',$(document.form1).serialize(),function(data) {
+          if(data.success) {
+              location.href='/';
+          }else {
+              alert(data.info)
+          }
+      },'json')
+      return false;
+  }
+</script>
 <%- include('parts/html-foot') %>
