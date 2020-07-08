@@ -83,12 +83,7 @@ app.use((req, res, next) => {
     res.locals.pageName = ''; // 用來active按鈕
     res.locals.email = 'null';
     res.locals.password = '0000';
-    req.session.adminUser
 
-    // req.session.adminUser={
-    //     account:'hao',
-    //     nickname:'晧'
-    // };
     res.locals.sess = req.session;
 
     next()
@@ -165,13 +160,18 @@ app.post('/login', async (req, res) => {
     const sql = "SELECT * FROM account WHERE email=? AND password=SHA1(?)";
     const [result] = await db.query(sql, [req.body.email, req.body.password]);
     if (result.length) {
-        req.session.adminUser = result[0]; // 將admin匹配到的user資料丟入req.session.adminUser
+        req.session.User = result[0]; // 將admin匹配到的user資料丟入req.session.User
         output.success = true;
         output.info = '';
     }
     res.json(output);
 })
 //-------------------------------------------------------------------------
+
+// 登出部分--------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
 
 app.get('/register', (req, res) => {
     res.render('register')
