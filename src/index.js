@@ -79,18 +79,19 @@ app.use(session({
 
 // custom middleware----------------------------------------------------------------
 // 可以預設一些全域的變數，如果用戶修改將被取代
-app.use((req, res, next)=>{
-    res.locals.pageName=''; // 用來active按鈕
-    res.locals.email='null';
-    res.locals.password='0000';
+app.use((req, res, next) => {
+    res.locals.pageName = ''; // 用來active按鈕
+    res.locals.email = 'null';
+    res.locals.password = '0000';
+    req.session.adminUser
 
     // req.session.adminUser={
     //     account:'hao',
     //     nickname:'晧'
     // };
-    res.locals.sess=req.session;
+    res.locals.sess = req.session;
 
- next()
+    next()
 })
 //----------------------------------------------------------------------------------
 
@@ -151,9 +152,26 @@ app.get('/restaurant', (req, res) => {
 })
 // --------------------------------------------------------------------------
 
+// 登入部分----------------------------------------------------------------
 app.get('/login', (req, res) => {
     res.render('login')
 })
+
+app.post('/login', async (req, res) => {
+    const output = {
+        success: false,
+        info: '帳號或密碼錯誤'
+    };
+    const sql = "SELECT * FROM account WHERE email=? AND password=SHA1(?)";
+    const [result] = await db.query(sql, [req.body.email, req.body.password]);
+    if (result.length) {
+        req.session.adminUser = result[0]; // 將admin匹配到的user資料丟入req.session.adminUser
+        output.success = true;
+        output.info = '';
+    }
+    res.json(output);
+})
+//-------------------------------------------------------------------------
 
 app.get('/register', (req, res) => {
     res.render('register')
