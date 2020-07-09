@@ -9,12 +9,12 @@
 </style>
 
 <div class='pageBK'
-  style="margin: 0px; padding: 0px ; background-color:black ; height:300% ; width:100%; position:fixed; z-index:-1">
+  style="margin: 0px; padding: 0px ; background-color:black ; height:300% ; width:100%; position:fixed; z-index:-2">
 </div>
 
 <header>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#"><i class="fad fa-wine-glass-alt "></i></a>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark; z-index:-1">
+    <a class="navbar-brand" href="/"><div style="font-size: 1.7em;">LOGO</div></i></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -37,13 +37,24 @@
         </li>
       </ul>
       <ul class="navbar-nav">
-        <% if(sess.User) { %>
+        <% if(sess.User && sess.User.type=="g") { %>
         <li class="nav-item ">
-          <a class="nav-link" href="/login" style="font-size: 1.3em;"><%= sess.User.name %></a>
+          <a class="nav-link" href="/" style="font-size: 1.3em;"><%= sess.User.name %></a>
+        </li>
+        <li class="nav-item ">
+          <a class="nav-link" href="/shopping" style="font-size: 1.3em;">購物車</a>
         </li>
         <li class="nav-item ">
           <a class="nav-link" href="/logout" style="font-size: 1.3em;">登出</a>
         </li>
+      <% } else if(sess.User && sess.User.type=="a") { %>
+          <li class="nav-item ">
+            <a class="nav-link" href="/" style="font-size: 1.3em;">admin</a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="/logout" style="font-size: 1.3em;">登出</a>
+          </li>
+
         <% } else { %>
         <li class="nav-item ">
           <a class="nav-link" href="/login" style="font-size: 1.3em;">登入</a>

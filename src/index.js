@@ -86,6 +86,7 @@ app.use((req, res, next) => {
 
     res.locals.sess = req.session;
 
+
     next()
 })
 //----------------------------------------------------------------------------------
@@ -93,16 +94,18 @@ app.use((req, res, next) => {
 
 //=====================================================================================================
 
-// 模板
+// 模板---------------------------------------------------------
 app.get('/temp', (req, res) => {
     res.render('temp')
 })
+// --------------------------------------------------------------
 
-// 首頁
+// 首頁-----------------------------------------------------
 app.get('/', (req, res) => {
     res.locals.pageName = 'home';
     res.render('main');
 });
+//-------------------------------------------------------------
 
 // 查詢網站登入次數-------------------------------------------
 app.get('/try-session', (req, res) => {
@@ -123,85 +126,95 @@ app.get('/try-session', (req, res) => {
 // 不過其他session資料是網站全域的
 //---------------------------------------------------------------
 
-// 課程部分-------------------------------------------------------------------
+// 課程-------------------------------------------------------------------
 app.get('/course', (req, res) => {
     res.render('course');
 });
 // --------------------------------------------------------------------------
 
-// app.post('/course', (req, res)=>{
-//     res.render('course1', req.body);
-//     // res.json(req.body);
-// });
 
-
-// 產品部分------------------------------------------------------------------
+// 產品------------------------------------------------------------------
 app.get('/products', (req, res) => {
     res.render('products');
 });
 // --------------------------------------------------------------------------
 
-// 場地部分-----------------------------------------------------------------
+
+// 場地-----------------------------------------------------------------
 app.get('/restaurant', async (req, res) => {
 
     const sql = "SELECT * FROM restaurant";
     const [r] = await db.query(sql);
     // res.json(r) // 只呈現json
 
-    //-------------------------------------------------------
-    res.render('restaurant', { rows: r }) // 記得這裡要用相對路徑
-})
-// --------------------------------------------------------------------------
-
-// 登入部分----------------------------------------------------------------
-app.get('/login', (req, res) => {
-    res.render('login')
-})
-
-app.post('/login', async (req, res) => {
-    const output = {
-        success: false,
-        info: 帳號或密碼錯誤
-    };
-    const sql = "SELECT * FROM account WHERE email=? AND password=SHA1(?)";
-    const [result] = await db.query(sql, [req.body.email, req.body.password]);
-    if (result.length) {
-        req.session.User = result[0]; // 將admin匹配到的user資料丟入req.session.User
-        output.success = true;
-        output.info = '';
+    if (res.locals.sess.User && res.locals.sess.User.type == 'a') {
+        return res.render('restaurant_admin', { rows: r }) // 記得這裡要用相對路徑
     }
-    res.json(output);
+    else if (res.locals.sess.User && res.locals.sess.User.type == 'g') {
+        return res.render('restaurant_account', { rows: r }) // 記得這裡要用相對路徑
+    }
+    else
+        res.render('restaurant', { rows: r }) // 記得這裡要用相對路徑
 })
-//-------------------------------------------------------------------------
-
-// 帳號登出------------------------------------
-app.get('/logout', (req, res) => {
-    delete req.session.User;
-    res.send(`<script>location.href='/'</script>`);
-})
-//--------------------------------------------
-
-app.get('/register', (req, res) => {
-    res.render('register')
+// 場地預約------------------------------------------------------------------
+app.get('/restaurant_reserve/:restaurant_NO', (req, res) => {
 })
 
-// 只是測試db有沒有連上線
-app.get('/try-db', (req, res) => {
-    const sql = "SELECT * FROM account";
-    db.query(sql)
-        .then(([r]) => {
-            res.json(r);
-        });
-});
-//=================================================================================================
+    //---------------------------------------------------------------------------
 
-app.use(express.static('public'));
 
-app.use((req, res, next) => {
-    res.status(404).send('<h2>找不到頁面</h2>')
-});
+    // 登入----------------------------------------------------------------
+    app.get('/login', (req, res) => {
+        res.render('login')
+    })
 
-app.listen(3123, () => {
-    console.log('server started!');
-});
+    app.post('/login', async (req, res) => {
+        const output = {
+            success: false,
+            info: '帳號或密碼錯誤'
+        };
+        const sql = "SELECT * FROM account WHERE email=? AND password=SHA1(?)";
+        const [result] = await db.query(sql, [req.body.email, req.body.password]);
+        if (result.length) {
+            req.session.User = result[0]; // 將admin匹配到的user資料丟入req.session.User
+            output.success = true;
+            output.info = '';
+        }
+        res.json(output);
+    })
+    //-------------------------------------------------------------------------
 
+
+    // 帳號------------------------------------
+    app.get('/logout', (req, res) => {
+        delete req.session.User;
+        res.send(`<script>location.href='/'</script>`);
+    })
+    //------------------------------------------------------------------------
+
+
+    // 註冊--------------------------------------------------------------------
+    app.get('/register', (req, res) => {
+        res.render('register')
+    })
+    // ----------------------------------------------------------------------
+
+
+    // 購物車--------------------------------------------------------------------
+    app.get('/shopping', (req, res) => {
+        res.render('shopping')
+    })
+    // ----------------------------------------------------------------------
+
+
+    //=================================================================================================
+
+    app.use(express.static('public'));
+
+    app.use((req, res, next) => {
+        res.status(404).send('<h2>找不到頁面</h2>')
+    });
+
+    app.listen(3123, () => {
+        console.log('server started!');
+    });
