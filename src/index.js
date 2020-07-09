@@ -142,8 +142,14 @@ app.get('/products', (req, res) => {
 // --------------------------------------------------------------------------
 
 // 場地部分-----------------------------------------------------------------
-app.get('/restaurant', (req, res) => {
-    res.render('restaurant')
+app.get('/restaurant', async (req, res) => {
+
+    const sql = "SELECT * FROM restaurant";
+    const [r] = await db.query(sql);
+    // res.json(r) // 只呈現json
+
+    //-------------------------------------------------------
+    res.render('restaurant', { rows: r }) // 記得這裡要用相對路徑
 })
 // --------------------------------------------------------------------------
 
@@ -155,7 +161,7 @@ app.get('/login', (req, res) => {
 app.post('/login', async (req, res) => {
     const output = {
         success: false,
-        info: '帳號或密碼錯誤'
+        info: 帳號或密碼錯誤
     };
     const sql = "SELECT * FROM account WHERE email=? AND password=SHA1(?)";
     const [result] = await db.query(sql, [req.body.email, req.body.password]);
@@ -169,7 +175,7 @@ app.post('/login', async (req, res) => {
 //-------------------------------------------------------------------------
 
 // 帳號登出------------------------------------
-app.get('/logout', (req, res)=>{
+app.get('/logout', (req, res) => {
     delete req.session.User;
     res.send(`<script>location.href='/'</script>`);
 })
