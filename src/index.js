@@ -157,7 +157,15 @@ app.get('/restaurant', async (req, res) => {
         res.render('restaurant', { rows: r }) // 記得這裡要用相對路徑
 })
 // 場地預約------------------------------------------------------------------
-app.get('/restaurant_reserve/:restaurant_NO', (req, res) => {
+app.get('/restaurant_reserve/:restaurant_NO', async (req, res) => {
+    const sql = "SELECT * FROM `restaurant` WHERE restaurant_NO=?";
+    const [result] = await db.query(sql, [req.params.restaurant_NO]);
+
+    if(result.length){
+        
+        res.render('restaurant_reserve', {rows: result});
+    }
+
 })
 
     //---------------------------------------------------------------------------
