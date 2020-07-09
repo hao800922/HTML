@@ -85,6 +85,11 @@ app.use((req, res, next) => {
     res.locals.password = '0000';
 
     res.locals.sess = req.session;
+    res.locals.rest = []
+    res.locals.prod = []
+    res.locals.cour = []
+
+
 
 
     next()
@@ -157,72 +162,81 @@ app.get('/restaurant', async (req, res) => {
         res.render('restaurant', { rows: r }) // 記得這裡要用相對路徑
 })
 // 場地預約------------------------------------------------------------------
-app.get('/restaurant_reserve/:restaurant_NO', async (req, res) => {
+app.get('/restaurant_reserve/:restaurant_NO?', async (req, res) => {
     const sql = "SELECT * FROM `restaurant` WHERE restaurant_NO=?";
     const [result] = await db.query(sql, [req.params.restaurant_NO]);
+    // let page=parseInt(req.params.restaurant_NO) || 1;
 
-    if(result.length){
-        
-        res.render('restaurant_reserve', {rows: result});
+    if (result.length) {
+
+        res.render('restaurant_reserve', { rows: result });
     }
-
 })
 
-    //---------------------------------------------------------------------------
+
+app.post('/restaurant_reserve', (req, res) => {
+    const output={
+        success: false,
+        error:'aaa',
+        body: req.body
+    } 
+    res.json(output);
+})
+//---------------------------------------------------------------------------
 
 
-    // 登入----------------------------------------------------------------
-    app.get('/login', (req, res) => {
-        res.render('login')
-    })
+// 登入----------------------------------------------------------------
+app.get('/login', (req, res) => {
+    res.render('login')
+})
 
-    app.post('/login', async (req, res) => {
-        const output = {
-            success: false,
-            info: '帳號或密碼錯誤'
-        };
-        const sql = "SELECT * FROM account WHERE email=? AND password=SHA1(?)";
-        const [result] = await db.query(sql, [req.body.email, req.body.password]);
-        if (result.length) {
-            req.session.User = result[0]; // 將admin匹配到的user資料丟入req.session.User
-            output.success = true;
-            output.info = '';
-        }
-        res.json(output);
-    })
-    //-------------------------------------------------------------------------
-
-
-    // 帳號------------------------------------
-    app.get('/logout', (req, res) => {
-        delete req.session.User;
-        res.send(`<script>location.href='/'</script>`);
-    })
-    //------------------------------------------------------------------------
+app.post('/login', async (req, res) => {
+    const output = {
+        success: false,
+        info: '帳號或密碼錯誤'
+    };
+    const sql = "SELECT * FROM account WHERE email=? AND password=SHA1(?)";
+    const [result] = await db.query(sql, [req.body.email, req.body.password]);
+    if (result.length) {
+        req.session.User = result[0]; // 將admin匹配到的user資料丟入req.session.User
+        output.success = true;
+        output.info = '';
+    }
+    res.json(output);
+})
+//-------------------------------------------------------------------------
 
 
-    // 註冊--------------------------------------------------------------------
-    app.get('/register', (req, res) => {
-        res.render('register')
-    })
-    // ----------------------------------------------------------------------
+// 帳號------------------------------------
+app.get('/logout', (req, res) => {
+    delete req.session.User;
+    res.send(`<script>location.href='/'</script>`);
+})
+//------------------------------------------------------------------------
 
 
-    // 購物車--------------------------------------------------------------------
-    app.get('/shopping', (req, res) => {
-        res.render('shopping')
-    })
-    // ----------------------------------------------------------------------
+// 註冊--------------------------------------------------------------------
+app.get('/register', (req, res) => {
+    res.render('register')
+})
+// ----------------------------------------------------------------------
 
 
-    //=================================================================================================
+// 購物車--------------------------------------------------------------------
+app.get('/shopping', (req, res) => {
+    res.render('shopping')
+})
+// ----------------------------------------------------------------------
 
-    app.use(express.static('public'));
 
-    app.use((req, res, next) => {
-        res.status(404).send('<h2>找不到頁面</h2>')
-    });
+//=================================================================================================
 
-    app.listen(3123, () => {
-        console.log('server started!');
-    });
+app.use(express.static('public'));
+
+app.use((req, res, next) => {
+    res.status(404).send('<h2>找不到頁面</h2>')
+});
+
+app.listen(3123, () => {
+    console.log('server started!');
+});
