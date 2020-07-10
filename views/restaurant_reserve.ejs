@@ -14,13 +14,13 @@
                 <div class="form-group">
                     <label for="item">項目</label><br>
                     <select name="item" id="item">
-                        <option value="<%= i.restaurant_title %>"><%= i.restaurant_title %></option>
+                        <option value="<%= i.restaurant_NO %>"><%= i.restaurant_title %></option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="date">日期</label>
-                    <input type="date" class="form-control" id="date" name="date" style="width: 30%;">
+                    <input type="date" class="form-control" id="date" name="date" style="width: 30%;" onchange="test()">
                 </div>
 
                 <button type="submit" class="btn btn-primary">送出</button>
@@ -41,6 +41,12 @@
 
 <%- include('parts/scripts') %>
 <script>
+    function test() {
+        a=$('#date').val()
+        console.log(a)
+        console.log('D'+a.toString().split('-').join(''))
+        
+    }
     
     function checkForm() {
         // Ajax

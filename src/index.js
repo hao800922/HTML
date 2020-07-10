@@ -174,12 +174,36 @@ app.get('/restaurant_reserve/:restaurant_NO?', async (req, res) => {
 })
 
 
-app.post('/restaurant_reserve', (req, res) => {
+app.post('/restaurant_reserve',async (req, res) => {
     const output={
         success: false,
-        error:'aaa',
-        body: req.body
-    } 
+        body: req.body,
+        
+    }
+    const d=("D"+req.body.date.toString().split("-").join(""))
+    strd="[{"+d+":"+res.locals.sess.User.sid+"}]"
+    a=JSON.parse(strd)
+    
+
+
+    
+    
+
+    const sql1="SELECT * FROM rest_status WHERE restaurant_NO=?"; // 查詢rest_status[restaurant_NO]
+    const sql2="UPDATE `rest_status` SET ? WHERE restaurant_NO=?"; // 更新rest_status[d, sid, restaurant_NO]
+    const sql3="INSERT INTO `shoppinglist_rest`( `sid`, `restaurant_NO`, `date`, `status`) VALUES (?,?,?,u)"; // 插入shoppinglist_rest[sid, restaurant_NO, date]
+
+    const [r1] = await db.query(sql1, [req.body.item]);
+
+    // if (r1[0][d]!=0) {
+    //     output.error = '已額滿';
+    //     return res.json(output);
+    // }
+    // const [r2] = await db.query(sql2, [strd,req.body.item]);
+    
+    
+
+
     res.json(output);
 })
 //---------------------------------------------------------------------------
