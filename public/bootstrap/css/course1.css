@@ -1,20 +1,3 @@
-h1, h2, h3, h4, h5, h6, p {
-    color: white;
-}
-
-img {
-    max-width: 100%;
-}
-
-.btn {
-    background: #C6A300;
-    color: white;
-    padding: 7px 26px;
-    border-radius: 20px;
-    font-size: 20px;
-    margin-left: 465px;
-}
-
 #course1_menu .jumbotron {
     height: 30vh;
     margin-bottom: 0px;
