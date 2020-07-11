@@ -85,13 +85,6 @@ app.use((req, res, next) => {
     res.locals.password = '0000';
 
     res.locals.sess = req.session;
-    res.locals.rest = []
-    res.locals.prod = []
-    res.locals.cour = []
-
-
-
-
     next()
 })
 //----------------------------------------------------------------------------------
@@ -163,46 +156,47 @@ app.get('/restaurant', async (req, res) => {
 })
 // 場地預約------------------------------------------------------------------
 app.get('/restaurant_reserve/:restaurant_NO?', async (req, res) => {
-    const sql = "SELECT * FROM `restaurant` WHERE restaurant_NO=?";
-    const [result] = await db.query(sql, [req.params.restaurant_NO]);
-    // let page=parseInt(req.params.restaurant_NO) || 1;
+    const sql1 = "SELECT * FROM `restaurant` WHERE restaurant_NO=?";
+    const sql2 = "SELECT * FROM `restaurant_shoppinglist` WHERE `restaurant_NO`=? and `date` between DATE_SUB(NOW(),INTERVAL 1 day) and DATE_ADD(NOW(),INTERVAL 30 day)"
 
-    if (result.length) {
+    const [r1] = await db.query(sql1, [req.params.restaurant_NO]);
+    const [r2] = await db.query(sql2, [req.params.restaurant_NO]);
 
-        res.render('restaurant_reserve', { rows: result });
+    for (i = 0; i< r2.length ; i++) {
+        r2[i].date = moment(r2[i].date).format('YYYY-MM-DD')
+    }
+
+
+    if (r1.length) {
+        res.render('restaurant_reserve', { rows1: r1, rows2: r2 });
     }
 })
 
 
-app.post('/restaurant_reserve',async (req, res) => {
-    const output={
+app.post('/restaurant_reserve', async (req, res) => {
+    const output = {
         success: false,
         body: req.body,
-        
     }
-    const d=("D"+req.body.date.toString().split("-").join(""))
-    strd="[{"+d+":"+res.locals.sess.User.sid+"}]"
-    a=JSON.parse(strd)
+
+    const sql1 = "SELECT * FROM `restaurant_shoppinglist` WHERE `restaurant_NO` LIKE ? AND `sid` = ? AND `date` = ?";
+    const sql2 = "INSERT INTO `restaurant_shoppinglist` SET ?";
+
+    const [r1] = await db.query(sql1, [req.body.restaurant_NO, res.locals.sess.User.sid, req.body.date]);
     
 
+    if (r1.length) {
+        output.error = '這天餐廳已有活動舉辦';
+        return res.json(output);
+    }
 
-    
-    
+    req.body.sid = res.locals.sess.User.sid
+    req.body.status = 'u'
+    const [r2] = await db.query(sql2, [req.body]);
 
-    const sql1="SELECT * FROM rest_status WHERE restaurant_NO=?"; // 查詢rest_status[restaurant_NO]
-    const sql2="UPDATE `rest_status` SET ? WHERE restaurant_NO=?"; // 更新rest_status[d, sid, restaurant_NO]
-    const sql3="INSERT INTO `shoppinglist_rest`( `sid`, `restaurant_NO`, `date`, `status`) VALUES (?,?,?,u)"; // 插入shoppinglist_rest[sid, restaurant_NO, date]
-
-    const [r1] = await db.query(sql1, [req.body.item]);
-
-    // if (r1[0][d]!=0) {
-    //     output.error = '已額滿';
-    //     return res.json(output);
-    // }
-    // const [r2] = await db.query(sql2, [strd,req.body.item]);
-    
-    
-
+    if (r2.affectedRows === 1 && r2.insertId) {
+        output.success = true;
+    }
 
     res.json(output);
 })
