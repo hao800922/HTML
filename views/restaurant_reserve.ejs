@@ -35,7 +35,7 @@
             <% for(let i of rows1) { %>
 
             
-            <form method="" name="form1" onsubmit="return checkForm()" style="margin-left: 5%; ">
+            <form method="post" name="form1" onsubmit="return checkForm()" style="margin-left: 5%; ">
 
                 <div class="form-group">
                     <label for="restaurant_NO">項目</label><br>
@@ -90,13 +90,6 @@
 
 <%- include('parts/scripts') %>
 <script>
-    function test() {
-        a = $('#date').val()
-        console.log(a)
-        console.log('D' + a.toString().split('-').join(''))
-
-    }
-
     function checkForm() {
         // Ajax
         $.post('/restaurant_reserve', $(document.form1).serialize(), function (data) {

@@ -8,6 +8,11 @@ const app = express();
 // 在專案下安裝 >npm i express
 // ref https://www.npmjs.com/package/express
 
+
+
+const sha1 = require('sha1');
+
+
 const { v4: uuidv4 } = require('uuid');
 // 引入uuidv4以供使用
 // 套件uuid會使用到的功用:
@@ -222,10 +227,8 @@ app.post('/login', async (req, res) => {
     }
     res.json(output);
 })
-//-------------------------------------------------------------------------
 
-
-// 帳號------------------------------------
+// 登出---------------------------------------------------------------------
 app.get('/logout', (req, res) => {
     delete req.session.User;
     res.send(`<script>location.href='/'</script>`);
@@ -237,15 +240,64 @@ app.get('/logout', (req, res) => {
 app.get('/register', (req, res) => {
     res.render('register')
 })
+
+app.post('/register', async (req, res) => {
+    const output = {
+        success: false,
+        body: req.body,
+    }
+
+    
+    const sql = "INSERT INTO `register` SET ?";
+    const sql1 = "SELECT * FROM `account` WHERE email=?";
+    const sql2 = "SELECT * FROM `register` WHERE email=?";
+    
+    const [r1] = await db.query(sql1, [req.body.email]);
+    const [r2] = await db.query(sql2, [req.body.email]);
+    
+
+    if (r1.length) {
+        output.error = '此email已有帳號';
+        return res.json(output);
+    }
+
+    if (r2.length) {
+        output.error = '此email已註冊過 正待審核';
+        return res.json(output);
+    }
+
+    req.body.password=sha1(req.body.password)
+    req.body.type='g'
+    const [r] = await db.query(sql, [req.body]);
+
+    if (r.affectedRows === 1 && r.insertId) {
+        output.success = true;
+    }
+
+    res.json(output);
+})
 // ----------------------------------------------------------------------
 
 
-// 購物車--------------------------------------------------------------------
+// 購物車======================================================================
+
+// 購物車_產品部分--------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+
+
+// 購物車_課程部分--------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+
+
+// 購物車_場地部分--------------------------------------------------------------
 app.get('/shopping', async (req, res) => {
     const sql1 = "SELECT * FROM `restaurant`";
     const sql2 = "SELECT * FROM `restaurant_shoppinglist` WHERE `sid`=? and `status`='u' ORDER BY `date`";
     const [r2] = await db.query(sql2, [res.locals.sess.User.sid]);
     const [r1] = await db.query(sql1);
+
     for (i = 0; i< r2.length ; i++) {
         r2[i].date = moment(r2[i].date).format('YYYY-MM-DD')
     };
@@ -265,7 +317,19 @@ app.get('/shopping', async (req, res) => {
 
     res.render('shopping',{rows2:r2, rows1:r1, ir, tpr})
 })
-// ----------------------------------------------------------------------
+// 購物車場地刪除部分-----------------------------------------------------------------------
+app.get('/shopping/del_restaurant/:rslid', async (req, res)=>{
+    const sql="DELETE FROM `restaurant_shoppinglist` WHERE rslid=?";
+    const [r]=await db.query(sql, [req.params.rslid]);
+
+    // 刪除後的轉跳畫面
+    if(req.get('Referer')) {
+        res.redirect(req.get('Referer'));
+    }else {
+        res.redirect('/');
+    }
+});
+//==========================================================================================
 
 
 //=================================================================================================
