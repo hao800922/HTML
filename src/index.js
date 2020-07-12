@@ -44,6 +44,10 @@ const moment = require('moment-timezone')
 const db = require(__dirname + '/db_connect');
 // 呼叫外掛方式的database
 
+const upload_restaurant = require(__dirname + '/upload_restaurant');
+// 設定multer比較複雜時, 另外用upload-module.js檔分開裝
+// 用戶端上傳檔案, 會經由外掛js檔處理
+
 
 const sessionStore = new MysqlStore({}, db)
 // 將session存放在db之中
@@ -146,7 +150,7 @@ app.get('/products', (req, res) => {
 // 場地-----------------------------------------------------------------
 app.get('/restaurant', async (req, res) => {
 
-    const sql = "SELECT * FROM restaurant";
+    const sql = "SELECT * FROM restaurant ORDER BY restaurant_NO DESC";
     const [r] = await db.query(sql);
     // res.json(r) // 只呈現json
 
@@ -205,7 +209,38 @@ app.post('/restaurant_reserve', async (req, res) => {
 
     res.json(output);
 })
-//---------------------------------------------------------------------------
+// 新增場地(admin)--------------------------------------------------------------
+app.get('/restaurant/add', (req, res) => {
+    res.render('restaurant_add')
+})
+
+app.post('/restaurant/add' , upload_restaurant.single('avatar') , async (req, res) => {
+    const output = {
+        success: false,
+        body: req.body,
+    }
+
+    const sql = "INSERT INTO `restaurant` SET ?";
+    const sql2 = "SELECT * FROM `restaurant` WHERE restaurant_NO=?";
+    
+    const [r2] = await db.query(sql2, [req.body.restaurant_NO]);
+    
+    if (r2.length) {
+        output.error = '此餐廳號碼已存在';
+        return res.json(output);
+    }
+    
+    const [r] = await db.query(sql, [req.body]);
+
+    if (r.affectedRows === 1) {
+        output.success = true;
+    }
+
+    res.json(output);
+})
+// 新增照片(admin)-----------------------------------------------------
+
+//--------------------------------------------------------------------
 
 
 // 登入----------------------------------------------------------------
