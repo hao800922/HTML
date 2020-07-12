@@ -141,8 +141,10 @@ app.get('/course1', (req, res) => {
 
 
 // 產品------------------------------------------------------------------
-app.get('/products', (req, res) => {
-    res.render('products');
+app.get('/products', async (req, res) => {
+    const sql = "SELECT * FROM products"
+    const [prd] = await db.query(sql);
+    res.render('products', { wine: prd });
 });
 // --------------------------------------------------------------------------
 
