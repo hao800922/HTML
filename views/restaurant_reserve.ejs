@@ -3,28 +3,76 @@
 
 <article>
     <div class="container" style="height: 800px ; word-break: break-all; margin: 10px auto 10px auto;">
-
-        <% for(let i of rows) { %>
-
         <div class="card" style="width: 80% ; margin: 10% auto;">
-            <div id="infobar" class="alert alert-success" role="alert" style="display: none">
-            </div>
-            <form method="" name="form1" onsubmit="return checkForm()" style="margin-left: 5%; margin-top: 5%;">
+            <div id="reserve" style="margin: 3%;">
+            <table class="table table-striped" style="border: 2px black solid">
+                <thead>
+                    <tr>
+                        <th scope="col">他人已預約日期</th>
+                        <th scope="col">活動名稱</th>
+                        <th scope="col">聯絡人</th>
+                        <th scope="col">聯絡人電話</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <% for(let i of rows2){ %>
+
+                    <tr>
+                        <td><%= i.date%></td>
+                        <td><%= i.partyname %></td>
+                        <td><%= i.contactperson %></td>
+                        <td><%= i.contactphone %></td>
+                    </tr>
+
+                    <% } %>
+
+                </tbody>
+            </table>
+        </div>
+
+
+            <% for(let i of rows1) { %>
+
+            
+            <form method="" name="form1" onsubmit="return checkForm()" style="margin-left: 5%; ">
 
                 <div class="form-group">
-                    <label for="item">項目</label><br>
-                    <select name="item" id="item">
-                        <option value="<%= i.restaurant_title %>"><%= i.restaurant_title %></option>
+                    <label for="restaurant_NO">項目</label><br>
+                    <select name="restaurant_NO" id="restaurant_NO">
+                        <option value="<%= i.restaurant_NO %>"><%= i.restaurant_title %></option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="date">日期</label>
-                    <input type="date" class="form-control" id="date" name="date" style="width: 30%;">
+                    <input type="date" class="form-control" id="date" name="date" style="width: 30%;" onchange="test()">
                 </div>
 
-                <button type="submit" class="btn btn-primary">送出</button>
+                <div class="form-group">
+                    <label for="partyname">活動名稱</label>
+                    <input type="text" class="form-control" id="partyname" name="partyname" style="width: 30%;"
+                        onchange="test()">
+                </div>
+
+                <div class="form-group">
+                    <label for="contactperson">負責人</label>
+                    <input type="text" class="form-control" id="contactperson" name="contactperson" style="width: 30%;"
+                        onchange="test()">
+                </div>
+
+                <div class="form-group">
+                    <label for="contactphone">負責人電話</label>
+                    <input type="text" class="form-control" id="contactphone" name="contactphone" style="width: 30%;"
+                        onchange="test()">
+                </div>
+
+                <button type="submit" class="btn btn-primary">加入購物車</button>
             </form>
+            <div id="infobar" class="alert alert-success" role="alert" style="display: none"></div>
+
+
+
             <div class="card-body">
                 <h1><%= i.restaurant_title %></h1>
                 <figure style="float: left; margin-right: 3%;">
@@ -35,23 +83,31 @@
         </div>
 
         <% } %>
+        
     </div>
 </article>
 
 
 <%- include('parts/scripts') %>
 <script>
-    
+    function test() {
+        a = $('#date').val()
+        console.log(a)
+        console.log('D' + a.toString().split('-').join(''))
+
+    }
+
     function checkForm() {
         // Ajax
         $.post('/restaurant_reserve', $(document.form1).serialize(), function (data) {
             console.log(data);
 
             if (data.success) {
-                $('#infobar').text('新增成功');
+                $('#infobar').text('已加入購物車');
                 $('#infobar').removeClass('alert-danger').addClass('alert-success');
+                $("#reserve").load(location.href+" #reserve" ) // 刷新DIV
                 setTimeout(function () {
-                    location.href = '/';
+                    location.href = '/restaurant';
                 }, 3000)
             } else {
                 $('#infobar').text(data.error || '新增失敗');

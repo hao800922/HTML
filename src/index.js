@@ -72,7 +72,7 @@ app.use(session({
     resave: false,
     store: sessionStore,
     cookie: {
-        maxAge: 1200000 // 最大閒置時間(msec)
+        maxAge: 1200000000 // 最大閒置時間(msec)
         // 而如果要查詢何時斷線要用req.session.coockie.expires
     }
 }));
@@ -85,13 +85,6 @@ app.use((req, res, next) => {
     res.locals.password = '0000';
 
     res.locals.sess = req.session;
-    res.locals.rest = []
-    res.locals.prod = []
-    res.locals.cour = []
-
-
-
-
     next()
 })
 //----------------------------------------------------------------------------------
@@ -132,8 +125,8 @@ app.get('/try-session', (req, res) => {
 //---------------------------------------------------------------
 
 // 課程-------------------------------------------------------------------
-app.get('/course', (req, res) => {
-    res.render('course');
+app.get('/course1', (req, res) => {
+    res.render('course1');
 });
 // --------------------------------------------------------------------------
 
@@ -165,23 +158,48 @@ app.get('/restaurant', async (req, res) => {
 })
 // 場地預約------------------------------------------------------------------
 app.get('/restaurant_reserve/:restaurant_NO?', async (req, res) => {
-    const sql = "SELECT * FROM `restaurant` WHERE restaurant_NO=?";
-    const [result] = await db.query(sql, [req.params.restaurant_NO]);
-    // let page=parseInt(req.params.restaurant_NO) || 1;
+    const sql1 = "SELECT * FROM `restaurant` WHERE restaurant_NO=?";
+    const sql2 = "SELECT * FROM `restaurant_shoppinglist` WHERE `restaurant_NO`=? and `date` between DATE_SUB(NOW(),INTERVAL 1 day) and DATE_ADD(NOW(),INTERVAL 30 day) ORDER BY `date`"
 
-    if (result.length) {
+    const [r1] = await db.query(sql1, [req.params.restaurant_NO]);
+    const [r2] = await db.query(sql2, [req.params.restaurant_NO]);
 
-        res.render('restaurant_reserve', { rows: result });
+    for (i = 0; i< r2.length ; i++) {
+        r2[i].date = moment(r2[i].date).format('YYYY-MM-DD')
+    }
+
+
+    if (r1.length) {
+        res.render('restaurant_reserve', { rows1: r1, rows2: r2 });
     }
 })
 
 
-app.post('/restaurant_reserve', (req, res) => {
-    const output={
+app.post('/restaurant_reserve', async (req, res) => {
+    const output = {
         success: false,
-        error:'aaa',
-        body: req.body
-    } 
+        body: req.body,
+    }
+
+    const sql1 = "SELECT * FROM `restaurant_shoppinglist` WHERE `restaurant_NO` LIKE ? AND `sid` = ? AND `date` = ?";
+    const sql2 = "INSERT INTO `restaurant_shoppinglist` SET ?";
+
+    const [r1] = await db.query(sql1, [req.body.restaurant_NO, res.locals.sess.User.sid, req.body.date]);
+    
+
+    if (r1.length) {
+        output.error = '這天餐廳已有活動舉辦';
+        return res.json(output);
+    }
+
+    req.body.sid = res.locals.sess.User.sid
+    req.body.status = 'u'
+    const [r2] = await db.query(sql2, [req.body]);
+
+    if (r2.affectedRows === 1 && r2.insertId) {
+        output.success = true;
+    }
+
     res.json(output);
 })
 //---------------------------------------------------------------------------
@@ -225,8 +243,29 @@ app.get('/register', (req, res) => {
 
 
 // 購物車--------------------------------------------------------------------
-app.get('/shopping', (req, res) => {
-    res.render('shopping')
+app.get('/shopping', async (req, res) => {
+    const sql1 = "SELECT * FROM `restaurant`";
+    const sql2 = "SELECT * FROM `restaurant_shoppinglist` WHERE `sid`=? and `status`='u' ORDER BY `date`";
+    const [r2] = await db.query(sql2, [res.locals.sess.User.sid]);
+    const [r1] = await db.query(sql1);
+    for (i = 0; i< r2.length ; i++) {
+        r2[i].date = moment(r2[i].date).format('YYYY-MM-DD')
+    };
+
+    for (i = 0; i< r2.length ; i++) {
+        r2[i].createtime = moment(r2[i].createtime).format('YYYY-MM-DD hh:mm')
+    };
+
+    ir=[]
+    for (i=0; i<r1.length ; i++) {
+        ir.push(r1[i].restaurant_NO)};
+
+    tpr=0
+    for (i=0; i<r2.length ; i++) {
+        tpr+=r1[ir.indexOf(r2[i].restaurant_NO)].restaurant_price
+    };
+
+    res.render('shopping',{rows2:r2, rows1:r1, ir, tpr})
 })
 // ----------------------------------------------------------------------
 
