@@ -72,7 +72,7 @@ app.use(session({
     resave: false,
     store: sessionStore,
     cookie: {
-        maxAge: 1200000 // 最大閒置時間(msec)
+        maxAge: 1200000000 // 最大閒置時間(msec)
         // 而如果要查詢何時斷線要用req.session.coockie.expires
     }
 }));
@@ -157,7 +157,7 @@ app.get('/restaurant', async (req, res) => {
 // 場地預約------------------------------------------------------------------
 app.get('/restaurant_reserve/:restaurant_NO?', async (req, res) => {
     const sql1 = "SELECT * FROM `restaurant` WHERE restaurant_NO=?";
-    const sql2 = "SELECT * FROM `restaurant_shoppinglist` WHERE `restaurant_NO`=? and `date` between DATE_SUB(NOW(),INTERVAL 1 day) and DATE_ADD(NOW(),INTERVAL 30 day)"
+    const sql2 = "SELECT * FROM `restaurant_shoppinglist` WHERE `restaurant_NO`=? and `date` between DATE_SUB(NOW(),INTERVAL 1 day) and DATE_ADD(NOW(),INTERVAL 30 day) ORDER BY `date`"
 
     const [r1] = await db.query(sql1, [req.params.restaurant_NO]);
     const [r2] = await db.query(sql2, [req.params.restaurant_NO]);
@@ -241,8 +241,29 @@ app.get('/register', (req, res) => {
 
 
 // 購物車--------------------------------------------------------------------
-app.get('/shopping', (req, res) => {
-    res.render('shopping')
+app.get('/shopping', async (req, res) => {
+    const sql1 = "SELECT * FROM `restaurant`";
+    const sql2 = "SELECT * FROM `restaurant_shoppinglist` WHERE `sid`=? and `status`='u' ORDER BY `date`";
+    const [r2] = await db.query(sql2, [res.locals.sess.User.sid]);
+    const [r1] = await db.query(sql1);
+    for (i = 0; i< r2.length ; i++) {
+        r2[i].date = moment(r2[i].date).format('YYYY-MM-DD')
+    };
+
+    for (i = 0; i< r2.length ; i++) {
+        r2[i].createtime = moment(r2[i].createtime).format('YYYY-MM-DD hh:mm')
+    };
+
+    ir=[]
+    for (i=0; i<r1.length ; i++) {
+        ir.push(r1[i].restaurant_NO)};
+
+    tpr=0
+    for (i=0; i<r2.length ; i++) {
+        tpr+=r1[ir.indexOf(r2[i].restaurant_NO)].restaurant_price
+    };
+
+    res.render('shopping',{rows2:r2, rows1:r1, ir, tpr})
 })
 // ----------------------------------------------------------------------
 

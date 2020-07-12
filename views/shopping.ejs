@@ -1,39 +1,84 @@
 <%- include('parts/html-head') %>
 <%- include('parts/navbar') %>
+<%- include('parts/scripts') %>
 
 <article>
 
     <div class="container" style="height: 800px ; word-break: break-all; margin: 10px auto 10px auto;">
-        
 
-        
-        <div class="card" style="width: 80% ; margin: 5% auto;">
+
+
+        <div class="card" style="width: 80% ; margin: 5% auto 15% auto ; padding: 2%;">
+            <h2>購物車</h2>
+
             <div class="card-body">
                 <h2>商品</h2>
-
             </div>
-        </div>
 
-        <div class="card" style="width: 80% ; margin: 5%  auto;">
+
+
+
+
             <div class="card-body">
                 <h2>課程</h2>
 
             </div>
-        </div>
 
-        <div class="card" style="width: 80% ; margin: 5%  auto;">
+
+
             <div class="card-body">
                 <h2>包場</h2>
+                <table class="table table-striped" style="border: 2px black solid">
+                    <thead>
+                        <tr>
+                            <th scope="col">訂單編號</th>
+                            <th scope="col">訂單日期</th>
+                            <th scope="col">餐廳名稱</th>
+                            <th scope="col">包場日期</th>
+                            <th scope="col">價錢</th>
+                            <th scope="col"><i class="fas fa-trash-alt"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
+
+                        <% for(let i of rows2){ %>
+                        <tr>
+
+                            <td><%= i.rslid %></td>
+                            <td><%= i.createtime %></td>
+                            <td><%= rows1[ir.indexOf(i.restaurant_NO)].restaurant_title %></td>
+                            <td><%= i.date %></td>
+                            <td><%= rows1[ir.indexOf(i.restaurant_NO)].restaurant_price %></td>
+                            <td>
+                                <a href="/address-book/edit/<%= i.rslid %>">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+
+                        </tr>
+                        <% } %>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>總計</td>
+                            <td><%= tpr %></td>
+                            <td>元</td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
             </div>
+            <button type="submit" class="btn btn-primary" style="width: 50%; margin: auto;">去結帳</button>
         </div>
-    
-
-    
-    
+    </div>
+</article>
 
 
 
 
-    <%- include('parts/scripts') %>
-    <%- include('parts/html-foot') %>
+
+
+<%- include('parts/html-foot') %>
