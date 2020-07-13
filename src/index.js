@@ -266,7 +266,18 @@ app.post('/restaurant/edit' , upload_restaurant.single('avatar') , async (req, r
     res.json(output);
 })
 
-//--------------------------------------------------------------------
+// 刪除餐廳------------------------------------------------------------
+app.get('/restaurant/del/:restaurant_NO', async (req, res)=>{
+    const sql="DELETE FROM `restaurant` WHERE restaurant_NO=?";
+    const [r]=await db.query(sql, [req.params.restaurant_NO]);
+
+    // 刪除後的轉跳畫面
+    if(req.get('Referer')) {
+        res.redirect(req.get('Referer'));
+    }else {
+        res.redirect('/');
+    }
+});
 
 
 // 登入----------------------------------------------------------------
