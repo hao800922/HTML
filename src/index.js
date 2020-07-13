@@ -240,7 +240,31 @@ app.post('/restaurant/add' , upload_restaurant.single('avatar') , async (req, re
 
     res.json(output);
 })
-// 新增照片(admin)-----------------------------------------------------
+// 修改餐廳(admin)-----------------------------------------------------
+app.get('/restaurant/edit/:restaurant_NO', async (req, res) => {
+
+    const sql = "SELECT * FROM `restaurant` WHERE restaurant_NO=?";
+    const [r] = await db.query(sql, [req.params.restaurant_NO]);
+
+    res.render('restaurant_edit',{rows:r[0]})
+})
+
+app.post('/restaurant/edit' , upload_restaurant.single('avatar') , async (req, res) => {
+    const output = {
+        success: false,
+        body: req.body,
+        files: req.files,
+    }
+
+    const restaurant_NO=req.body.restaurant_NO;
+    const sql="UPDATE `restaurant` SET ? WHERE restaurant_NO=?";
+    const [r]=await db.query(sql, [req.body, restaurant_NO]);
+    if(r.changedRows===1) {
+        output.success=true;
+    }
+    output.r=r;
+    res.json(output);
+})
 
 //--------------------------------------------------------------------
 
