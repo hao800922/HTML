@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2020-07-12 19:07:04
+-- 產生時間： 2020-07-13 10:57:14
 -- 伺服器版本： 8.0.20
 -- PHP 版本： 7.3.19
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- 資料庫： `project_1`
 --
+CREATE DATABASE IF NOT EXISTS `project_1` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `project_1`;
 
 -- --------------------------------------------------------
 
@@ -27,6 +29,7 @@ SET time_zone = "+00:00";
 -- 資料表結構 `account`
 --
 
+DROP TABLE IF EXISTS `account`;
 CREATE TABLE `account` (
   `sid` int UNSIGNED NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -52,6 +55,7 @@ INSERT INTO `account` (`sid`, `email`, `password`, `name`, `birthday`, `phone`, 
 -- 資料表結構 `register`
 --
 
+DROP TABLE IF EXISTS `register`;
 CREATE TABLE `register` (
   `rid` int UNSIGNED NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -80,6 +84,7 @@ INSERT INTO `register` (`rid`, `email`, `password`, `name`, `birthday`, `phone`,
 -- 資料表結構 `restaurant`
 --
 
+DROP TABLE IF EXISTS `restaurant`;
 CREATE TABLE `restaurant` (
   `restaurant_NO` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `restaurant_title` varchar(255) NOT NULL,
@@ -105,6 +110,7 @@ INSERT INTO `restaurant` (`restaurant_NO`, `restaurant_title`, `restaurant_conte
 -- 資料表結構 `restaurant_shoppinglist`
 --
 
+DROP TABLE IF EXISTS `restaurant_shoppinglist`;
 CREATE TABLE `restaurant_shoppinglist` (
   `rslid` int NOT NULL,
   `restaurant_NO` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
@@ -132,6 +138,7 @@ INSERT INTO `restaurant_shoppinglist` (`rslid`, `restaurant_NO`, `sid`, `date`, 
 -- 資料表結構 `sessions`
 --
 
+DROP TABLE IF EXISTS `sessions`;
 CREATE TABLE `sessions` (
   `session_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `expires` int UNSIGNED NOT NULL,
@@ -143,6 +150,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
+('0JFxsfYQuYpJl7uNq5xNwjGdNqZ3xzM4', 1595830501, '{\"cookie\":{\"originalMaxAge\":1200000000,\"expires\":\"2020-07-27T06:11:42.045Z\",\"httpOnly\":true,\"path\":\"/\"},\"User\":{\"sid\":1,\"email\":\"john@gmail.com\",\"password\":\"40bd001563085fc35165329ea1ff5c5ecbdbbeef\",\"name\":\"John\",\"birthday\":\"2020-06-16T16:00:00.000Z\",\"phone\":\"0911111111\",\"type\":\"g\",\"createtime\":\"2020-07-08T01:56:07.000Z\"}}'),
 ('OHullWb6Z7Qn-1WCyNOjcOffHuFW6jZ6', 1595773546, '{\"cookie\":{\"originalMaxAge\":1200000000,\"expires\":\"2020-07-26T14:25:11.816Z\",\"httpOnly\":true,\"path\":\"/\"},\"User\":{\"sid\":1,\"email\":\"john@gmail.com\",\"password\":\"40bd001563085fc35165329ea1ff5c5ecbdbbeef\",\"name\":\"John\",\"birthday\":\"2020-06-16T16:00:00.000Z\",\"phone\":\"0911111111\",\"type\":\"g\",\"createtime\":\"2020-07-08T01:56:07.000Z\"}}');
 
 --
@@ -199,7 +207,7 @@ ALTER TABLE `register`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `restaurant_shoppinglist`
 --
 ALTER TABLE `restaurant_shoppinglist`
-  MODIFY `rslid` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `rslid` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
