@@ -525,7 +525,6 @@ app.post('/admin/account/edit_sid', async (req, res) => {
 
     const sql = "UPDATE `account` SET ? WHERE sid =?";
     
-
     req.body.password = sha1(req.body.password)
 
     const [r] = await db.query(sql, [req.body,req.body.sid]);
