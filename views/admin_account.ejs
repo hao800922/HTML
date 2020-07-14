@@ -1,0 +1,89 @@
+<%- include('parts/html-head') %>
+<%- include('parts/navbar') %>
+
+<article>
+    <div class="container" style="height: 800px ; word-break: break-all; margin: 10px auto 10px auto;">
+        <div class="card" style="width: 100% ; margin: 10% auto;">
+            <div id="reserve" style="margin: 3%;">
+                <h3>審核註冊者</h3>
+                <table class="table table-striped" >
+                    <thead>
+                        <tr>
+                            <th scope="col">編號</th>
+                            <th scope="col">email</th>
+                            <th scope="col">姓名</th>
+                            <th scope="col">生日</th>
+                            <th scope="col">電話</th>
+                            <th scope="col">型態</th>
+                            <th scope="col">註冊日期</th>
+                            <th><i class="far fa-plus-square"></i></th>
+                            <th><i class="far fa-trash-alt"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <% for(let i of rows1){ %>
+
+                        <tr>
+                            <td><%= i.rid%></td>
+                            <td><%= i.email %></td>
+                            <td><%= i.name %></td>
+                            <td><%= i.birthday %></td>
+                            <td><%= i.phone %></td>
+                            <td><%= i.type %></td>
+                            <td><%= i.createtime %></td>
+                            <td><i class="far fa-plus-square"></i></td>
+                            <td><i class="far fa-trash-alt"></i></td>
+                        </tr>
+
+                        <% } %>
+
+                    </tbody>
+                </table>
+            </div>
+            <div id="reserve" style="margin: 3%;">
+                <h3>管理帳號</h3>
+                <table class="table table-striped" >
+                    <thead>
+                        <tr>
+                            <th scope="col">編號</th>
+                            <th scope="col">email</th>
+                            <th scope="col">姓名</th>
+                            <th scope="col">生日</th>
+                            <th scope="col">電話</th>
+                            <th scope="col">型態</th>
+                            <th scope="col">註冊日期</th>
+                            <th><i class="fas fa-edit"></i></th>
+                            <th><i class="far fa-trash-alt"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <% for(let i of rows2){ %>
+
+                        <tr>
+                            <td><%= i.sid%></td>
+                            <td><%= i.email %></td>
+                            <td><%= i.name %></td>
+                            <td><%= i.birthday %></td>
+                            <td><%= i.phone %></td>
+                            <td><%= i.type %></td>
+                            <td><%= i.createtime %></td>
+                            <td><i class="fas fa-edit"></i></td>
+                            <td><i class="far fa-trash-alt"></i></td>
+                        </tr>
+
+                        <% } %>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</article>
+
+
+<%- include('parts/scripts') %>
+<script>
+</script>
+<%- include('parts/html-foot') %>

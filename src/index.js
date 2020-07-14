@@ -149,7 +149,7 @@ app.get('/products', async (req, res) => {
 // --------------------------------------------------------------------------
 
 
-// 場地-----------------------------------------------------------------
+// 場地部分=====================================================================
 app.get('/restaurant', async (req, res) => {
 
     const sql = "SELECT * FROM restaurant ORDER BY restaurant_NO DESC";
@@ -278,6 +278,7 @@ app.get('/restaurant/del/:restaurant_NO', async (req, res)=>{
         res.redirect('/');
     }
 });
+// ====================================================================
 
 
 // 登入----------------------------------------------------------------
@@ -403,6 +404,31 @@ app.get('/shopping/del_restaurant/:rslid', async (req, res)=>{
 });
 //==========================================================================================
 
+
+// 管理者專區部分===========================================================================
+app.get('/admin/account', async (req, res) => {
+    const sql1 = "SELECT * FROM `register` ORDER BY rid DESC"
+    const [r1]=await db.query(sql1);
+    for (i = 0; i< r1.length ; i++) {
+        r1[i].birthday = moment(r1[i].birthday).format('YYYY-MM-DD')
+    };
+
+    for (i = 0; i< r1.length ; i++) {
+        r1[i].createtime = moment(r1[i].createtime).format('YYYY-MM-DD hh:mm')
+    };
+
+    const sql2 = "SELECT * FROM `account` ORDER BY sid DESC"
+    const [r2]=await db.query(sql2);
+    for (i = 0; i< r2.length ; i++) {
+        r2[i].birthday = moment(r2[i].birthday).format('YYYY-MM-DD')
+    };
+
+    for (i = 0; i< r2.length ; i++) {
+        r2[i].createtime = moment(r2[i].createtime).format('YYYY-MM-DD hh:mm')
+    };
+    res.render('admin_account',{rows1:r1,rows2:r2})
+})
+//==========================================================================================
 
 //=================================================================================================
 
