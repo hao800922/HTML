@@ -173,7 +173,7 @@ app.get('/restaurant_reserve/:restaurant_NO?', async (req, res) => {
     const [r1] = await db.query(sql1, [req.params.restaurant_NO]);
     const [r2] = await db.query(sql2, [req.params.restaurant_NO]);
 
-    for (i = 0; i< r2.length ; i++) {
+    for (i = 0; i < r2.length; i++) {
         r2[i].date = moment(r2[i].date).format('YYYY-MM-DD')
     }
 
@@ -194,7 +194,7 @@ app.post('/restaurant_reserve', async (req, res) => {
     const sql2 = "INSERT INTO `restaurant_shoppinglist` SET ?";
 
     const [r1] = await db.query(sql1, [req.body.restaurant_NO, res.locals.sess.User.sid, req.body.date]);
-    
+
 
     if (r1.length) {
         output.error = '這天餐廳已有活動舉辦';
@@ -216,7 +216,7 @@ app.get('/restaurant/add', (req, res) => {
     res.render('restaurant_add')
 })
 
-app.post('/restaurant/add' , upload_restaurant.single('avatar') , async (req, res) => {
+app.post('/restaurant/add', upload_restaurant.single('avatar'), async (req, res) => {
     const output = {
         success: false,
         body: req.body,
@@ -224,14 +224,14 @@ app.post('/restaurant/add' , upload_restaurant.single('avatar') , async (req, re
 
     const sql = "INSERT INTO `restaurant` SET ?";
     const sql2 = "SELECT * FROM `restaurant` WHERE restaurant_NO=?";
-    
+
     const [r2] = await db.query(sql2, [req.body.restaurant_NO]);
-    
+
     if (r2.length) {
         output.error = '此餐廳號碼已存在';
         return res.json(output);
     }
-    
+
     const [r] = await db.query(sql, [req.body]);
 
     if (r.affectedRows === 1) {
@@ -246,35 +246,35 @@ app.get('/restaurant/edit/:restaurant_NO', async (req, res) => {
     const sql = "SELECT * FROM `restaurant` WHERE restaurant_NO=?";
     const [r] = await db.query(sql, [req.params.restaurant_NO]);
 
-    res.render('restaurant_edit',{rows:r[0]})
+    res.render('restaurant_edit', { rows: r[0] })
 })
 
-app.post('/restaurant/edit' , upload_restaurant.single('avatar') , async (req, res) => {
+app.post('/restaurant/edit', upload_restaurant.single('avatar'), async (req, res) => {
     const output = {
         success: false,
         body: req.body,
         files: req.files,
     }
 
-    const restaurant_NO=req.body.restaurant_NO;
-    const sql="UPDATE `restaurant` SET ? WHERE restaurant_NO=?";
-    const [r]=await db.query(sql, [req.body, restaurant_NO]);
-    if(r.changedRows===1) {
-        output.success=true;
+    const restaurant_NO = req.body.restaurant_NO;
+    const sql = "UPDATE `restaurant` SET ? WHERE restaurant_NO=?";
+    const [r] = await db.query(sql, [req.body, restaurant_NO]);
+    if (r.changedRows === 1) {
+        output.success = true;
     }
-    output.r=r;
+    output.r = r;
     res.json(output);
 })
 
 // 刪除餐廳------------------------------------------------------------
-app.get('/restaurant/del/:restaurant_NO', async (req, res)=>{
-    const sql="DELETE FROM `restaurant` WHERE restaurant_NO=?";
-    const [r]=await db.query(sql, [req.params.restaurant_NO]);
+app.get('/restaurant/del/:restaurant_NO', async (req, res) => {
+    const sql = "DELETE FROM `restaurant` WHERE restaurant_NO=?";
+    const [r] = await db.query(sql, [req.params.restaurant_NO]);
 
     // 刪除後的轉跳畫面
-    if(req.get('Referer')) {
+    if (req.get('Referer')) {
         res.redirect(req.get('Referer'));
-    }else {
+    } else {
         res.redirect('/');
     }
 });
@@ -320,14 +320,14 @@ app.post('/register', async (req, res) => {
         body: req.body,
     }
 
-    
+
     const sql = "INSERT INTO `register` SET ?";
     const sql1 = "SELECT * FROM `account` WHERE email=?";
     const sql2 = "SELECT * FROM `register` WHERE email=?";
-    
+
     const [r1] = await db.query(sql1, [req.body.email]);
     const [r2] = await db.query(sql2, [req.body.email]);
-    
+
 
     if (r1.length) {
         output.error = '此email已有帳號';
@@ -339,8 +339,8 @@ app.post('/register', async (req, res) => {
         return res.json(output);
     }
 
-    req.body.password=sha1(req.body.password)
-    req.body.type='g'
+    req.body.password = sha1(req.body.password)
+    req.body.type = 'g'
     const [r] = await db.query(sql, [req.body]);
 
     if (r.affectedRows === 1 && r.insertId) {
@@ -371,34 +371,35 @@ app.get('/shopping', async (req, res) => {
     const [r2] = await db.query(sql2, [res.locals.sess.User.sid]);
     const [r1] = await db.query(sql1);
 
-    for (i = 0; i< r2.length ; i++) {
+    for (i = 0; i < r2.length; i++) {
         r2[i].date = moment(r2[i].date).format('YYYY-MM-DD')
     };
 
-    for (i = 0; i< r2.length ; i++) {
+    for (i = 0; i < r2.length; i++) {
         r2[i].createtime = moment(r2[i].createtime).format('YYYY-MM-DD hh:mm')
     };
 
-    ir=[]
-    for (i=0; i<r1.length ; i++) {
-        ir.push(r1[i].restaurant_NO)};
-
-    tpr=0
-    for (i=0; i<r2.length ; i++) {
-        tpr+=r1[ir.indexOf(r2[i].restaurant_NO)].restaurant_price
+    ir = []
+    for (i = 0; i < r1.length; i++) {
+        ir.push(r1[i].restaurant_NO)
     };
 
-    res.render('shopping',{rows2:r2, rows1:r1, ir, tpr})
+    tpr = 0
+    for (i = 0; i < r2.length; i++) {
+        tpr += r1[ir.indexOf(r2[i].restaurant_NO)].restaurant_price
+    };
+
+    res.render('shopping', { rows2: r2, rows1: r1, ir, tpr })
 })
 // 購物車場地刪除部分-----------------------------------------------------------------------
-app.get('/shopping/del_restaurant/:rslid', async (req, res)=>{
-    const sql="DELETE FROM `restaurant_shoppinglist` WHERE rslid=?";
-    const [r]=await db.query(sql, [req.params.rslid]);
+app.get('/shopping/del_restaurant/:rslid', async (req, res) => {
+    const sql = "DELETE FROM `restaurant_shoppinglist` WHERE rslid=?";
+    const [r] = await db.query(sql, [req.params.rslid]);
 
     // 刪除後的轉跳畫面
-    if(req.get('Referer')) {
+    if (req.get('Referer')) {
         res.redirect(req.get('Referer'));
-    }else {
+    } else {
         res.redirect('/');
     }
 });
@@ -406,28 +407,114 @@ app.get('/shopping/del_restaurant/:rslid', async (req, res)=>{
 
 
 // 管理者專區部分===========================================================================
+
+// 管理帳號部分------------------------------------------------------------------------
 app.get('/admin/account', async (req, res) => {
     const sql1 = "SELECT * FROM `register` ORDER BY rid DESC"
-    const [r1]=await db.query(sql1);
-    for (i = 0; i< r1.length ; i++) {
+    const [r1] = await db.query(sql1);
+    for (i = 0; i < r1.length; i++) {
         r1[i].birthday = moment(r1[i].birthday).format('YYYY-MM-DD')
     };
 
-    for (i = 0; i< r1.length ; i++) {
+    for (i = 0; i < r1.length; i++) {
         r1[i].createtime = moment(r1[i].createtime).format('YYYY-MM-DD hh:mm')
     };
 
-    const sql2 = "SELECT * FROM `account` ORDER BY sid DESC"
-    const [r2]=await db.query(sql2);
-    for (i = 0; i< r2.length ; i++) {
+    const sql2 = "SELECT * FROM `account` WHERE type ='g' ORDER BY sid DESC"
+    const [r2] = await db.query(sql2);
+    for (i = 0; i < r2.length; i++) {
         r2[i].birthday = moment(r2[i].birthday).format('YYYY-MM-DD')
     };
 
-    for (i = 0; i< r2.length ; i++) {
+    for (i = 0; i < r2.length; i++) {
         r2[i].createtime = moment(r2[i].createtime).format('YYYY-MM-DD hh:mm')
     };
-    res.render('admin_account',{rows1:r1,rows2:r2})
+
+    const sql3 = "SELECT * FROM `account` WHERE type ='b' ORDER BY sid DESC"
+    const [r3] = await db.query(sql3);
+    for (i = 0; i < r3.length; i++) {
+        r3[i].birthday = moment(r3[i].birthday).format('YYYY-MM-DD')
+    };
+
+    for (i = 0; i < r3.length; i++) {
+        r3[i].createtime = moment(r3[i].createtime).format('YYYY-MM-DD hh:mm')
+    };
+    res.render('admin_account', { rows1: r1, rows2: r2, rows3: r3 })
 })
+// 註冊者轉為會員部分--------------------------------------------------------------------
+app.get('/admin/account/add_rid/:rid', async (req, res) => {
+    const sql1 = "SELECT * FROM `register` WHERE rid=?";
+    const sql2 = "INSERT INTO `account` SET ?";
+    const sql3 = "DELETE FROM `register` WHERE rid=?";
+
+    const [r1] = await db.query(sql1, [req.params.rid]);
+    delete r1[0].rid
+    delete r1[0].createtime
+
+    const [r2] = await db.query(sql2, [r1[0]]);
+
+    const [r3] = await db.query(sql3, [req.params.rid]);
+
+    // 刪除後的轉跳畫面
+    if (req.get('Referer')) {
+        res.redirect(req.get('Referer'));
+    } else {
+        res.redirect('/');
+    }
+});
+
+// 刪除註冊者部分------------------------------------------------------------------------
+app.get('/admin/account/del_rid/:rid', async (req, res) => {
+    const sql = "DELETE FROM `register` WHERE rid=?";
+    const [r] = await db.query(sql, [req.params.rid]);
+
+    // 刪除後的轉跳畫面
+    if (req.get('Referer')) {
+        res.redirect(req.get('Referer'));
+    } else {
+        res.redirect('/');
+    }
+});
+
+// 將會員加入黑名單------------------------------------------------------------------------
+app.get('/admin/account/black_sid/:sid', async (req, res) => {
+    const sql1 = "SELECT * FROM `account` WHERE sid=?";
+    const sql2 = "UPDATE `account` SET ? WHERE sid=?";
+
+    const [r1] = await db.query(sql1, [req.params.sid]);
+    delete r1[0].sid
+    delete r1[0].createtime
+    r1[0].type='b'
+
+    const [r2] = await db.query(sql2, [r1[0], req.params.sid]);
+
+    // 刪除後的轉跳畫面
+    if (req.get('Referer')) {
+        res.redirect(req.get('Referer'));
+    } else {
+        res.redirect('/');
+    }
+});
+
+// 將會員移除黑名單------------------------------------------------------------------------
+app.get('/admin/account/white_sid/:sid', async (req, res) => {
+    const sql1 = "SELECT * FROM `account` WHERE sid=?";
+    const sql2 = "UPDATE `account` SET ? WHERE sid=?";
+
+    const [r1] = await db.query(sql1, [req.params.sid]);
+    delete r1[0].sid
+    delete r1[0].createtime
+    r1[0].type='g'
+
+    const [r2] = await db.query(sql2, [r1[0], req.params.sid]);
+
+    // 刪除後的轉跳畫面
+    if (req.get('Referer')) {
+        res.redirect(req.get('Referer'));
+    } else {
+        res.redirect('/');
+    }
+});
 //==========================================================================================
 
 //=================================================================================================

@@ -14,7 +14,6 @@
                             <th scope="col">姓名</th>
                             <th scope="col">生日</th>
                             <th scope="col">電話</th>
-                            <th scope="col">型態</th>
                             <th scope="col">註冊日期</th>
                             <th><i class="far fa-plus-square"></i></th>
                             <th><i class="far fa-trash-alt"></i></th>
@@ -30,7 +29,6 @@
                             <td><%= i.name %></td>
                             <td><%= i.birthday %></td>
                             <td><%= i.phone %></td>
-                            <td><%= i.type %></td>
                             <td><%= i.createtime %></td>
                             <td><a href="/admin/account/add_rid/<%= i.rid%>"><i class="far fa-plus-square"></i></a></td>
                             <td><a href="/admin/account/del_rid/<%= i.rid%>"><i class="far fa-trash-alt"></i></a></td>
@@ -51,10 +49,9 @@
                             <th scope="col">姓名</th>
                             <th scope="col">生日</th>
                             <th scope="col">電話</th>
-                            <th scope="col">型態</th>
-                            <th scope="col">註冊日期</th>
+                            <th scope="col">審核日期</th>
                             <th><i class="fas fa-edit"></i></th>
-                            <th><i class="far fa-trash-alt"></i></th>
+                            <th><i class="fas fa-user"></i></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,10 +64,44 @@
                             <td><%= i.name %></td>
                             <td><%= i.birthday %></td>
                             <td><%= i.phone %></td>
-                            <td><%= i.type %></td>
                             <td><%= i.createtime %></td>
                             <td><a href="/admin/account/edit_sid/<%= i.sid%>"><i class="fas fa-edit"></i></a></td>
-                            <td><a href="/admin/account/del_sid/<%= i.sid%>"><i class="far fa-trash-alt"></i></a></td>
+                            <td><a href="/admin/account/black_sid/<%= i.sid%>"><i class="fas fa-user"></i></a></td>
+                        </tr>
+
+                        <% } %>
+                        
+                    </tbody>
+                </table>
+            </div>
+            <div id="reserve" style="margin: 3%;">
+                <h3>黑名單</h3>
+                <table class="table table-striped" >
+                    <thead>
+                        <tr>
+                            <th scope="col">編號</th>
+                            <th scope="col">email</th>
+                            <th scope="col">姓名</th>
+                            <th scope="col">生日</th>
+                            <th scope="col">電話</th>
+                            <th scope="col">審核日期</th>
+                            <th><i class="fas fa-edit"></i></th>
+                            <th><i class="far fa-user"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <% for(let i of rows3){ %>
+
+                        <tr>
+                            <td><%= i.sid%></td>
+                            <td><%= i.email %></td>
+                            <td><%= i.name %></td>
+                            <td><%= i.birthday %></td>
+                            <td><%= i.phone %></td>
+                            <td><%= i.createtime %></td>
+                            <td><a href="/admin/account/edit_sid/<%= i.sid%>"><i class="fas fa-edit"></i></a></td>
+                            <td><a href="/admin/account/white_sid/<%= i.sid%>"><i class="far fa-user"></i></a></td>
                         </tr>
 
                         <% } %>
