@@ -150,6 +150,7 @@ app.get('/products', async (req, res) => {
 
 
 // 場地部分=====================================================================
+// 場地頁面呈現----------------------------------------------------------------
 app.get('/restaurant', async (req, res) => {
 
     const sql = "SELECT * FROM restaurant ORDER BY restaurant_NO DESC";
@@ -281,7 +282,8 @@ app.get('/restaurant/del/:restaurant_NO', async (req, res) => {
 // ====================================================================
 
 
-// 登入----------------------------------------------------------------
+// 身分相關部分===============================================================
+// 登入-------------------------------------------------------------------
 app.get('/login', (req, res) => {
     res.render('login')
 })
@@ -306,8 +308,6 @@ app.get('/logout', (req, res) => {
     delete req.session.User;
     res.send(`<script>location.href='/'</script>`);
 })
-//------------------------------------------------------------------------
-
 
 // 註冊--------------------------------------------------------------------
 app.get('/register', (req, res) => {
@@ -349,11 +349,10 @@ app.post('/register', async (req, res) => {
 
     res.json(output);
 })
-// ----------------------------------------------------------------------
+//==========================================================================
 
 
 // 購物車======================================================================
-
 // 購物車_產品部分--------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
@@ -396,7 +395,6 @@ app.get('/shopping/del_restaurant/:rslid', async (req, res) => {
     const sql = "DELETE FROM `restaurant_shoppinglist` WHERE rslid=?";
     const [r] = await db.query(sql, [req.params.rslid]);
 
-    // 刪除後的轉跳畫面
     if (req.get('Referer')) {
         res.redirect(req.get('Referer'));
     } else {
@@ -407,7 +405,6 @@ app.get('/shopping/del_restaurant/:rslid', async (req, res) => {
 
 
 // 管理者專區部分===========================================================================
-
 // 管理帳號部分------------------------------------------------------------------------
 app.get('/admin/account', async (req, res) => {
     const sql1 = "SELECT * FROM `register` ORDER BY rid DESC"
@@ -455,7 +452,6 @@ app.get('/admin/account/add_rid/:rid', async (req, res) => {
 
     const [r3] = await db.query(sql3, [req.params.rid]);
 
-    // 刪除後的轉跳畫面
     if (req.get('Referer')) {
         res.redirect(req.get('Referer'));
     } else {
@@ -468,7 +464,6 @@ app.get('/admin/account/del_rid/:rid', async (req, res) => {
     const sql = "DELETE FROM `register` WHERE rid=?";
     const [r] = await db.query(sql, [req.params.rid]);
 
-    // 刪除後的轉跳畫面
     if (req.get('Referer')) {
         res.redirect(req.get('Referer'));
     } else {
@@ -488,7 +483,6 @@ app.get('/admin/account/black_sid/:sid', async (req, res) => {
 
     const [r2] = await db.query(sql2, [r1[0], req.params.sid]);
 
-    // 刪除後的轉跳畫面
     if (req.get('Referer')) {
         res.redirect(req.get('Referer'));
     } else {
@@ -508,16 +502,43 @@ app.get('/admin/account/white_sid/:sid', async (req, res) => {
 
     const [r2] = await db.query(sql2, [r1[0], req.params.sid]);
 
-    // 刪除後的轉跳畫面
     if (req.get('Referer')) {
         res.redirect(req.get('Referer'));
     } else {
         res.redirect('/');
     }
 });
+
+// 修改會員資料------------------------------------------------------------------------
+app.get('/admin/account/edit_sid/:sid', async (req, res) => {
+    const sql1 = "SELECT * FROM `account` WHERE sid=?";
+    const [r1] = await db.query(sql1, [req.params.sid]);
+    r1[0].birthday = moment(r1[0].birthday).format('YYYY-MM-DD')
+    
+    res.render('admin_account_edit',{rows1:r1});
+});
+app.post('/admin/account/edit_sid', async (req, res) => {
+    const output = {
+        success: false,
+        body: req.body,
+    }
+
+    const sql = "UPDATE `account` SET ? WHERE sid =?";
+    
+
+    req.body.password = sha1(req.body.password)
+
+    const [r] = await db.query(sql, [req.body,req.body.sid]);
+
+    if (r.changedRows===1) {
+        output.success = true;
+    }
+
+    res.json(output);
+})
 //==========================================================================================
 
-//=================================================================================================
+// 下面禁止修改===================================================================================
 
 app.use(express.static('public'));
 

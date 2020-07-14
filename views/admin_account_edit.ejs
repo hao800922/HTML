@@ -1,0 +1,81 @@
+<%- include('parts/html-head') %>
+<%- include('parts/navbar') %>
+
+<article>
+    <div class="container" style="  word-break: break-all; margin: 30px auto 10px auto;">
+
+        <div class="card" style="width: 80% ; margin:3% auto 15% auto;">
+            <div class="card-body">
+                <h5 class="card-title">修改會員資料</h5>
+                <form method="post" name="form1" onsubmit="return checkForm()">
+
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="sid" name="sid" value="<%= rows1[0].sid %>">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="type" name="type" value="<%= rows1[0].type %>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="<%= rows1[0].email %>">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="password">Password (預設:123)</label>
+                        <input type="password" class="form-control" id="password" name="password" value="123">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">姓名</label>
+                        <input type="text" class="form-control" id="name" name="name" value="<%= rows1[0].name %>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="birthday">生日</label>
+                        <input type="date" class="form-control" id="birthday" name="birthday"
+                            value="<%= rows1[0].birthday %>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">電話</label>
+                        <input type="text" class="form-control" id="phone" name="phone" value="<%= rows1[0].phone %>">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">修改會員資料</button>
+                </form>
+                <div id="infobar" class="alert alert-success" role="alert" style="display: none"></div>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<%- include('parts/scripts') %>
+<script>
+    function checkForm() {
+        // Ajax
+        $.post('/admin/account/edit_sid', $(document.form1).serialize(), function (data) {
+            console.log(data);
+
+            if (data.success) {
+                $('#infobar').text('修改成功');
+                $('#infobar').removeClass('alert-danger').addClass('alert-success');
+                setTimeout(function () {
+                    location.href = '/admin/account';
+                }, 3000)
+            } else {
+                $('#infobar').text(data.error || '未修改');
+                $('#infobar').removeClass('alert-success').addClass('alert-danger');
+                setTimeout(function () {
+                    $('#infobar').slideUp();
+                }, 3000)
+            }
+            $('#infobar').slideDown();
+        }, 'json');
+        return false; // 阻斷轉跳
+    }
+</script>
+<%- include('parts/html-foot') %>
