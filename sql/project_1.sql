@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2020-07-13 10:57:14
+-- 產生時間： 2020-07-15 11:19:45
 -- 伺服器版本： 8.0.20
 -- PHP 版本： 7.3.19
 
@@ -46,8 +46,33 @@ CREATE TABLE `account` (
 --
 
 INSERT INTO `account` (`sid`, `email`, `password`, `name`, `birthday`, `phone`, `type`, `createtime`) VALUES
-(1, 'john@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'John', '2020-06-17', '0911111111', 'g', '2020-07-08 09:56:07'),
-(2, 'admin@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'admin', '2020-06-17', '0922222222', 'a', '2020-07-08 09:57:45');
+(1, 'john@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'John', '2020-06-11', '0911111111', 'g', '2020-07-08 09:56:07'),
+(2, 'admin@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'admin', '2020-06-17', '0922222222', 'a', '2020-07-08 09:57:45'),
+(3, 'ken@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'ken', '2020-07-23', '0912341234', 'b', '2020-07-15 08:49:13'),
+(4, 'ben@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'ben', '2019-01-12', '0944444444', 'b', '2020-07-15 08:49:51'),
+(5, 'pete@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'pete', '2020-06-29', '0912121212', 'g', '2020-07-15 11:33:37'),
+(6, 'may@gmail.com', 'da39a3ee5e6b4b0d3255bfef95601890afd80709', 'may', '2020-07-01', '0943214321', 'b', '2020-07-15 11:34:46');
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `products`
+--
+
+DROP TABLE IF EXISTS `products`;
+CREATE TABLE `products` (
+  `products_no` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `products_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `products_imformation_alc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `products_imformation` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 傾印資料表的資料 `products`
+--
+
+INSERT INTO `products` (`products_no`, `products_name`, `products_imformation_alc`, `products_imformation`) VALUES
+('01', 'whisky', '48%', 'Kavalan Classic Single Malt Whisky exemplifies the sheer quality of whisky coming out of Taiwan.');
 
 -- --------------------------------------------------------
 
@@ -72,11 +97,7 @@ CREATE TABLE `register` (
 --
 
 INSERT INTO `register` (`rid`, `email`, `password`, `name`, `birthday`, `phone`, `type`, `createtime`) VALUES
-(1, 'ken@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'ken', '2020-07-23', '0912341234', 'g', '2020-07-12 12:05:16'),
-(3, 'ben@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'ben', '2019-01-12', '0944444444', 'g', '2020-07-12 13:29:10'),
-(4, 'may@gmail.com', 'da39a3ee5e6b4b0d3255bfef95601890afd80709', 'may', '2020-07-01', '0943214321', 'g', '2020-07-12 13:31:36'),
-(5, 'joy@gmail.com', 'da39a3ee5e6b4b0d3255bfef95601890afd80709', 'joy', '2020-07-07', '0944445555', 'g', '2020-07-12 13:41:30'),
-(6, 'pete@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'pete', '2020-06-29', '0912121212', 'g', '2020-07-12 13:54:41');
+(5, 'joy@gmail.com', 'da39a3ee5e6b4b0d3255bfef95601890afd80709', 'joy', '2020-07-07', '0944445555', 'g', '2020-07-12 13:41:30');
 
 -- --------------------------------------------------------
 
@@ -150,7 +171,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
-('0JFxsfYQuYpJl7uNq5xNwjGdNqZ3xzM4', 1595830501, '{\"cookie\":{\"originalMaxAge\":1200000000,\"expires\":\"2020-07-27T06:11:42.045Z\",\"httpOnly\":true,\"path\":\"/\"},\"User\":{\"sid\":1,\"email\":\"john@gmail.com\",\"password\":\"40bd001563085fc35165329ea1ff5c5ecbdbbeef\",\"name\":\"John\",\"birthday\":\"2020-06-16T16:00:00.000Z\",\"phone\":\"0911111111\",\"type\":\"g\",\"createtime\":\"2020-07-08T01:56:07.000Z\"}}'),
+('0JFxsfYQuYpJl7uNq5xNwjGdNqZ3xzM4', 1596004612, '{\"cookie\":{\"originalMaxAge\":1200000000,\"expires\":\"2020-07-29T06:15:28.585Z\",\"httpOnly\":true,\"path\":\"/\"},\"User\":{\"sid\":2,\"email\":\"admin@gmail.com\",\"password\":\"40bd001563085fc35165329ea1ff5c5ecbdbbeef\",\"name\":\"admin\",\"birthday\":\"2020-06-16T16:00:00.000Z\",\"phone\":\"0922222222\",\"type\":\"a\",\"createtime\":\"2020-07-08T01:57:45.000Z\"}}'),
 ('OHullWb6Z7Qn-1WCyNOjcOffHuFW6jZ6', 1595773546, '{\"cookie\":{\"originalMaxAge\":1200000000,\"expires\":\"2020-07-26T14:25:11.816Z\",\"httpOnly\":true,\"path\":\"/\"},\"User\":{\"sid\":1,\"email\":\"john@gmail.com\",\"password\":\"40bd001563085fc35165329ea1ff5c5ecbdbbeef\",\"name\":\"John\",\"birthday\":\"2020-06-16T16:00:00.000Z\",\"phone\":\"0911111111\",\"type\":\"g\",\"createtime\":\"2020-07-08T01:56:07.000Z\"}}');
 
 --
@@ -162,6 +183,12 @@ INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
 --
 ALTER TABLE `account`
   ADD PRIMARY KEY (`sid`);
+
+--
+-- 資料表索引 `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`products_no`);
 
 --
 -- 資料表索引 `register`
@@ -195,7 +222,7 @@ ALTER TABLE `sessions`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `account`
 --
 ALTER TABLE `account`
-  MODIFY `sid` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `sid` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `register`
