@@ -1,0 +1,81 @@
+<%- include('parts/html-head') %>
+<%- include('parts/navbar') %>
+
+<article>
+    <div class="container" style="  word-break: break-all; margin: 30px auto 10px auto;">
+        <div class="card" style="width: 80% ; margin:3% auto 15% auto;">
+            <div class="card-body">
+                <h5 class="card-title">新增產品</h5>
+                <form action="/products/add" method="POST" name="form1"
+                    onsubmit="return formCheck()">
+
+                    <div class="form-group">
+                        <label for="products_no">產品編號</label>
+                        <input type="text" class="form-control" id="products_no" name="products_no">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="products_name">產品名稱</label>
+                        <input type="text" class="form-control" id="products_name" name="products_name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="products_name">產品濃度</label>
+                        <input type="text" class="form-control" id="products_imformation_alc" name="products_imformation_alc">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="restaurant_content">產品描述(中文30字內 英文70字內)</label>
+                        <textarea class="form-control" name="products_imformation" id="products_imformation" cols="30" rows="10"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="products_name">產品價格</label>
+                        <input type="text" class="form-control" id="products_price" name="products_price">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="avatar">產品圖片</label>
+                        <input type="file" class="form-control-file" accept="image/*" id="avatar" name="avatar">
+                        <!-- accept="image/*"表示[開啟視窗]只能選擇img相關檔案 -->
+                    </div>
+                    <input type="submit" class="btn btn-primary">
+                </form>
+                <div id="infobar" class="alert alert-success" role="alert" style="display: none"></div>
+            </div>
+        </div>
+    </div>
+
+</article>
+
+<%- include('parts/scripts') %>
+<script>
+    function formCheck() {
+        const product = new FormData(document.form1);
+        fetch('/products/add', { // 要匹配的路由
+            method: 'POST', // 方法
+            body: products // 要上傳的內容
+        })
+            .then(wine => wine.json()) // 將擷取的內容轉為json
+
+            .then(data => {       // 再將json進行函數處理
+                console.log(data);
+                if (data.success) {
+                    $('#infobar').text('完成新增');
+                    $('#infobar').removeClass('alert-danger').addClass('alert-success');
+                    setTimeout(function () {
+                        location.href = '/products';
+                    }, 3000)
+                } else {
+                    $('#infobar').text(data.error || '新增失敗');
+                    $('#infobar').removeClass('alert-success').addClass('alert-danger');
+                    setTimeout(function () {
+                        $('#infobar').slideUp();
+                    }, 3000)
+                }
+                $('#infobar').slideDown();
+            })
+        return false // 終止動作
+    }
+</script>
+<%- include('parts/html-foot') %>

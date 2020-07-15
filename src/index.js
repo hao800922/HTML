@@ -145,7 +145,7 @@ app.get('/products', async (req, res) => {
     const sql = "SELECT * FROM products"
     const [prd] = await db.query(sql);
     if (res.locals.sess.User && res.locals.sess.User.type == 'a') {
-        return res.render('porducts_admin', { wine: prd }) // 記得這裡要用相對路徑
+        return res.render('products_admin', { wine: prd }) // 記得這裡要用相對路徑
     }
     else if (res.locals.sess.User && res.locals.sess.User.type == 'g') {
         return res.render('products_account', { wine: prd }) // 記得這裡要用相對路徑
@@ -153,7 +153,35 @@ app.get('/products', async (req, res) => {
     else
     res.render('products', { wine: prd });
 });
-// --------------------------------------------------------------------------
+// 新增產品----------------------------------------------------------------------
+app.get('/products/add', (req, res) => {
+    res.render('products_add')
+})
+
+app.post('/products/add', upload_restaurant.single('avatar'), async (req, res) => {
+    const output = {
+        success: false,
+        body: req.body,
+    }
+
+    const sql = "INSERT INTO `products` SET ?";
+    const sql2 = "SELECT * FROM `products` WHERE products_no=?";
+
+    const [prd2] = await db.query(sql2, [req.body.products_no]);
+
+    if (prd2.length) {
+        output.error = '此號碼已存在';
+        return res.json(output);
+    }
+
+    const [prd] = await db.query(sql, [req.body]);
+
+    if (prd.affectedRows === 1) {
+        output.success = true;
+    }
+
+    res.json(output);
+})
 
 
 // 場地部分=====================================================================
