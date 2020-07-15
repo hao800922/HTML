@@ -51,12 +51,12 @@
 <%- include('parts/scripts') %>
 <script>
     function formCheck() {
-        const products = new FormData(document.form2);
+        const fd = new FormData(document.form1);
         fetch('/products/add', { // 要匹配的路由
             method: 'POST', // 方法
-            body: products // 要上傳的內容
+            body: fd // 要上傳的內容
         })
-            .then(wine => wine.json()) // 將擷取的內容轉為json
+            .then(r => r.json()) // 將擷取的內容轉為json
 
             .then(data => {       // 再將json進行函數處理
                 console.log(data);
@@ -64,7 +64,7 @@
                     $('#infobar').text('完成新增');
                     $('#infobar').removeClass('alert-danger').addClass('alert-success');
                     setTimeout(function () {
-                        location.href = '/products';
+                        location.href = '/restaurant';
                     }, 3000)
                 } else {
                     $('#infobar').text(data.error || '新增失敗');

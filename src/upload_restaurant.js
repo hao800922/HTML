@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
     },         // 當前資料夾src + 退到上一層資料夾/public/img-uploads
     filename: function (req, file, cb) {
         let ext = extMap[file.mimetype];
-        cb(null, req.body.products_no + ext)
+        cb(null, req.body.restaurant_NO + ext)
         // if (ext) { cb(null, uuidv4() + ext) }   // 因為有fileFilter, 不需要以filename判斷檔案類型
         // else { cb(new Error('bad file type')) }
     }

@@ -45,6 +45,7 @@ const db = require(__dirname + '/db_connect');
 // 呼叫外掛方式的database
 
 const upload_restaurant = require(__dirname + '/upload_restaurant');
+const upload_products = require(__dirname + '/upload_products');
 // 設定multer比較複雜時, 另外用upload-module.js檔分開裝
 // 用戶端上傳檔案, 會經由外掛js檔處理
 
@@ -158,7 +159,7 @@ app.get('/products/add', (req, res) => {
     res.render('products_add')
 })
 
-app.post('/products/add', upload_restaurant.single('avatar'), async (req, res) => {
+app.post('/products/add', upload_products.single('avatar'), async (req, res) => {
     const output = {
         success: false,
         body: req.body,
