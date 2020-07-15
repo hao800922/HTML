@@ -2,23 +2,28 @@
 <%- include('parts/navbar') %>
 
 <style>
-  h1, h2, h3, h4, h5, h6, p {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
     color: white;
-}
+  }
 
-img {
+  img {
     max-width: 100%;
-}
+  }
 
-.btn {
+  .btn {
     background: #C6A300;
     color: white;
     padding: 7px 26px;
     border-radius: 20px;
     font-size: 20px;
-    margin-left: 465px;
-}
-
+    margin-top: 10px;
+  }
 </style>
 
 <section id="course1_menu">
@@ -26,13 +31,13 @@ img {
     <div class="container">
       <div class="row">
         <div class="col-md-4">
-          <a href="#">高地威士忌探索之旅</a>
+          <a href="/course1">高地威士忌探索之旅</a>
         </div>
         <div class="col-md-4">
-          <a href="#">源自於海洋的烈酒之王</a>
+          <a href="/course2">源自於海洋的烈酒之王</a>
         </div>
         <div class="col-md-4">
-          <a href="#">雅痞威士忌深度巡禮</a>
+          <a href="/course3">雅痞威士忌深度巡禮</a>
         </div>
       </div>
     </div>
@@ -45,7 +50,7 @@ img {
       <div class="col-md-12 text-center">
         <div class="row">
           <div class="col-md-4 text-left">
-            <img src="/img/1582015852-BOI.jpg">
+            <img src="/img/c1-01.jpg">
           </div>
           <div class="col-md-8 text-left">
             <p class="lead">高地威士忌探索之旅</p>
@@ -78,58 +83,66 @@ img {
           </div>
           <div class="col-md-9 text-left">
             <div class="c1-showtext-1">
-              <p>Talisker 泰斯卡 10年</p>
-              <p>Talisker 泰斯卡 Storm</p>
-              <p>Talisker 泰斯卡 Port Ruighe</p>
+              <p>Clynelish 克里尼利基 14年</p>
+              <p>Dalwhinnie 達爾維尼 15年</p>
             </div>
             <div class="c1-showtext-2">
-              <p>Caol Ila 卡爾里拉 12年</p>
-              <p>Caol Ila 卡爾里拉 Moch</p>
-              <p>Lagavulin 樂加維林16年</p>
+              <p>Royal Lochnagar 皇家藍勳 12年</p>
+              <p>Oban 歐本 14年</p>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="row c1-r2">
-      <div class="col-md-12 text-center">
+      <div class="col-md-12">
         <div class="row">
           <div class="col-md-3 text-center">
             <h4>餐酒搭配</h4>
           </div>
-          <div class="col-md-4">
-            <img src="/img/taliske.jpg">
+          <div class="col-md-9" style="display: inline-block">
+            <div class="c1-show-img">
+              <img src="img/c1-02.jpg">
+            </div>
+            <div class="c1-show-text">
+              <p class="c1-showtext-3">Royal Lochnagar 皇家藍勳 12年</p>
+              <p class="c1-showtext-4">酒食搭配：<br>
+                新廣式脆皮燒肉</p>
+              <p class="c1-showtext-4">
+                採用廣式燒臘的手法：醃、川、烤、爆皮製作而成，口感脆香、油花分佈均勻的紮實鮮嫩肉質，塔配濃郁爽口的芥末慕斯醬，獨創出新式燒肉風味，與Royal Lochnagar的奶油果香風味完美相襯。</p>
+            </div>
+          </div>
+
+          <!-- <div class="col-md-4">
+            <img src="img/c1-02.jpg">
           </div>
           <div class="col-md-5 text-left">
-            <p class="c1-showtext-3">Talisker 泰斯卡 10年</p>
+            <p class="c1-showtext-3">Royal Lochnagar 皇家藍勳 12年</p>
             <p class="c1-showtext-4">酒食搭配：<br>
-              海潮之境- 高級生蠔</p>
+              新廣式脆皮燒肉</p>
             <p class="c1-showtext-4">
-              當強烈而煙燻的 Talisker，<br>
-              遇上珍貴海鮮食材交織出的島嶼礦味，<br>
-              為酒食搭配，開啟了美好的經典對談。</p>
-          </div>
+              採用廣式燒臘的手法：醃、川、烤、爆皮製作而成，口感脆香、油花分佈均勻的紮實鮮嫩肉質，塔配濃郁爽口的芥末慕斯醬，獨創出新式燒肉風味，與Royal Lochnagar的奶油果香風味完美相襯。</p>
+          </div> -->
         </div>
       </div>
     </div>
-    <div class="row c1-r3">
+    <!-- <div class="row c1-r3">
       <div class="col-md-12">
         <div class="row">
           <div class="col-md-3">
 
           </div>
           <div class="col-md-9">
-            <img class="c1-show-img1" src="/img/1-taliske.jpg">
-            <img class="c1-show-img2" src="/img/2-taliske.jpg">
-            <img class="c1-show-img3" src="/img/3-taliske.jpg">
-            <img class="c1-show-img4" src="/img/4-taliske.jpg">
+            <img class="c1-show-img1" src="/img/c1-03.jpg">
+            <img class="c1-show-img2" src="/img/c1-04.jpg">
+            <img class="c1-show-img3" src="/img/c1-05.jpg">
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </div> -->
   </div>
 </section>
+
 
 <!-- hide bottom-->
 <section id="temp">
