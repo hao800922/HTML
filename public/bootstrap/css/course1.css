@@ -108,9 +108,27 @@
     font-size: 20px;
 }
 
+#course1_show .owl-stage{
+    background: burlywood;
+    transform: translate3d(0px, 0px, 0px);
+    transition: all 0s ease 0s;
+    /* width: 700px; */
+}
+
+#course1_show .owl-item{
+    width: 200px;
+}
+
+/* #course1_show .c1-box4-item{
+    width: 200px;
+} */
 
 
-#course1_show .c1-r3 img {
+
+
+
+
+/* #course1_show .c1-r3 img {
     width: 150px;
 }
 
@@ -124,7 +142,7 @@
 
 #course1_show .c1-r3 .c1-show-img3 {
     margin-right: 30px;
-}
+} */
 
 
 
