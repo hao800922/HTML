@@ -185,6 +185,9 @@ app.post('/products/add', upload_products.single('avatar'), async (req, res) => 
 })
 
 
+
+
+
 // 場地部分=====================================================================
 // 場地頁面呈現----------------------------------------------------------------
 app.get('/restaurant', async (req, res) => {
@@ -219,7 +222,6 @@ app.get('/restaurant_reserve/:restaurant_NO?', async (req, res) => {
         res.render('restaurant_reserve', { rows1: r1, rows2: r2 });
     }
 })
-
 
 app.post('/restaurant_reserve', async (req, res) => {
     const output = {
@@ -277,6 +279,7 @@ app.post('/restaurant/add', upload_restaurant.single('avatar'), async (req, res)
 
     res.json(output);
 })
+
 // 修改餐廳(admin)-----------------------------------------------------
 app.get('/restaurant/edit/:restaurant_NO', async (req, res) => {
 
