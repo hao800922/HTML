@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2020-07-14 07:00:13
+-- 產生時間： 2020-07-15 11:19:39
 -- 伺服器版本： 8.0.20
 -- PHP 版本： 7.4.7
 
@@ -29,18 +29,22 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `products`;
 CREATE TABLE `products` (
-  `products_no` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `products_no` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `products_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `products_imformation_alc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `products_imformation` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+  `products_imformation_alc` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `products_imformation` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `products_price` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `products`
 --
 
-INSERT INTO `products` (`products_no`, `products_name`, `products_imformation_alc`, `products_imformation`) VALUES
-('01', 'whisky', '48%', 'Kavalan Classic Single Malt Whisky exemplifies the sheer quality of whisky coming out of Taiwan.');
+INSERT INTO `products` (`products_no`, `products_name`, `products_imformation_alc`, `products_imformation`, `products_price`) VALUES
+('p01', 'whisky', '48%', '', 2000),
+('p02', 'Red Wine', '15%', '', 2000),
+('p03', 'Beer', '5%', '', 100),
+('p07', '2222', '2222', '', 2222);
 
 --
 -- 已傾印資料表的索引
