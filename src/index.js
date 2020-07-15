@@ -349,6 +349,64 @@ app.post('/register', async (req, res) => {
 
     res.json(output);
 })
+// 修改密碼----------------------------------------------------------------
+app.get('/account/edit_password/:sid', async (req, res) => {
+    const sql1 = "SELECT * FROM `account` WHERE sid=?";
+    const [r1] = await db.query(sql1, [req.session.User.sid]);
+    r1[0].birthday = moment(r1[0].birthday).format('YYYY-MM-DD')
+    
+    res.render('account_edit_password',{rows1:r1});
+});
+app.post('/account/edit_password', async (req, res) => {
+    const output = {
+        success: false,
+        body: req.body,
+    }
+    if (req.body.password != req.body.test) {
+         output.error = '兩次輸入密碼不同';
+        return res.json(output);
+    } else {delete req.body.test }
+
+    const sql = "UPDATE `account` SET ? WHERE sid =?";
+    req.body.password = sha1(req.body.password)
+
+    const [r] = await db.query(sql, [req.body,req.body.sid]);
+
+    if (r.changedRows===1) {
+        output.success = true;
+        
+    }
+
+    res.json(output);
+})
+
+// 修改資料---------------------------------------------------------------
+app.get('/account/edit_info/:sid', async (req, res) => {
+    const sql1 = "SELECT * FROM `account` WHERE sid=?";
+    const [r1] = await db.query(sql1, [req.session.User.sid]);
+    r1[0].birthday = moment(r1[0].birthday).format('YYYY-MM-DD')
+    
+    res.render('account_edit_info',{rows1:r1});
+});
+app.post('/account/edit_info', async (req, res) => {
+    const output = {
+        success: false,
+        body: req.body,
+    }
+    
+
+    const sql = "UPDATE `account` SET ? WHERE sid =?";
+    
+
+    const [r] = await db.query(sql, [req.body,req.body.sid]);
+
+    if (r.changedRows===1) {
+        output.success = true;
+        
+    }
+
+    res.json(output);
+})
 //==========================================================================
 
 
@@ -405,7 +463,7 @@ app.get('/shopping/del_restaurant/:rslid', async (req, res) => {
 
 
 // 管理者專區部分===========================================================================
-// 管理帳號部分------------------------------------------------------------------------
+// (admin)管理帳號部分------------------------------------------------------------------------
 app.get('/admin/account', async (req, res) => {
     const sql1 = "SELECT * FROM `register` ORDER BY rid DESC"
     const [r1] = await db.query(sql1);
@@ -438,7 +496,7 @@ app.get('/admin/account', async (req, res) => {
     };
     res.render('admin_account', { rows1: r1, rows2: r2, rows3: r3 })
 })
-// 註冊者轉為會員部分--------------------------------------------------------------------
+// (admin)註冊者轉為會員部分--------------------------------------------------------------------
 app.get('/admin/account/add_rid/:rid', async (req, res) => {
     const sql1 = "SELECT * FROM `register` WHERE rid=?";
     const sql2 = "INSERT INTO `account` SET ?";
@@ -459,7 +517,7 @@ app.get('/admin/account/add_rid/:rid', async (req, res) => {
     }
 });
 
-// 刪除註冊者部分------------------------------------------------------------------------
+// (admin)刪除註冊者部分------------------------------------------------------------------------
 app.get('/admin/account/del_rid/:rid', async (req, res) => {
     const sql = "DELETE FROM `register` WHERE rid=?";
     const [r] = await db.query(sql, [req.params.rid]);
@@ -471,7 +529,7 @@ app.get('/admin/account/del_rid/:rid', async (req, res) => {
     }
 });
 
-// 將會員加入黑名單------------------------------------------------------------------------
+// (admin)將會員加入黑名單------------------------------------------------------------------------
 app.get('/admin/account/black_sid/:sid', async (req, res) => {
     const sql1 = "SELECT * FROM `account` WHERE sid=?";
     const sql2 = "UPDATE `account` SET ? WHERE sid=?";
@@ -490,7 +548,7 @@ app.get('/admin/account/black_sid/:sid', async (req, res) => {
     }
 });
 
-// 將會員移除黑名單------------------------------------------------------------------------
+// (admin)將會員移除黑名單------------------------------------------------------------------------
 app.get('/admin/account/white_sid/:sid', async (req, res) => {
     const sql1 = "SELECT * FROM `account` WHERE sid=?";
     const sql2 = "UPDATE `account` SET ? WHERE sid=?";
@@ -509,7 +567,7 @@ app.get('/admin/account/white_sid/:sid', async (req, res) => {
     }
 });
 
-// 修改會員資料------------------------------------------------------------------------
+// (admin)修改會員資料------------------------------------------------------------------------
 app.get('/admin/account/edit_sid/:sid', async (req, res) => {
     const sql1 = "SELECT * FROM `account` WHERE sid=?";
     const [r1] = await db.query(sql1, [req.params.sid]);
