@@ -144,6 +144,13 @@ app.get('/course1', (req, res) => {
 app.get('/products', async (req, res) => {
     const sql = "SELECT * FROM products"
     const [prd] = await db.query(sql);
+    if (res.locals.sess.User && res.locals.sess.User.type == 'a') {
+        return res.render('porducts_admin', { wine: prd }) // 記得這裡要用相對路徑
+    }
+    else if (res.locals.sess.User && res.locals.sess.User.type == 'g') {
+        return res.render('products_account', { wine: prd }) // 記得這裡要用相對路徑
+    }
+    else
     res.render('products', { wine: prd });
 });
 // --------------------------------------------------------------------------
