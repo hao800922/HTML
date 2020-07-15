@@ -1,0 +1,32 @@
+<%- include('parts/html-head') %>
+<%- include('parts/navbar') %>
+
+<article>
+  
+  <div class="album py-5 bg-light" style='margin-bottom: 40px;'>
+    <div class="container">
+      <div class="row">    
+        <% for(let prd of wine) { %>  
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">                
+            <div class="card-body">
+              <img src="/img/p<%= prd.products_no %>.jpg" class="d-block w-100" alt="...">
+              <p class="card-text"><%= prd.products_name %></p>
+              <p class="card-text"><%= prd.products_imformation_alc %></p>
+              <p class="card-text"><%= prd.products_imformation %></p>
+              <p class="card-text"><%= prd.products_price %></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">add</button>
+                  <!-- <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </div>      
+</article>
+<%- include('parts/scripts') %>
+<%- include('parts/html-foot') %>
