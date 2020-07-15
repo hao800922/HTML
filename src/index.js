@@ -45,7 +45,9 @@ const db = require(__dirname + '/db_connect');
 // 呼叫外掛方式的database
 
 const upload_restaurant = require(__dirname + '/upload_restaurant');
+
 const upload_products = require(__dirname + '/upload_products');
+
 // 設定multer比較複雜時, 另外用upload-module.js檔分開裝
 // 用戶端上傳檔案, 會經由外掛js檔處理
 
@@ -364,6 +366,7 @@ app.post('/register', async (req, res) => {
 
 
     const sql = "INSERT INTO `register` SET ?";
+
     const sql1 = "SELECT * FROM `account` WHERE email=?";
     const sql2 = "SELECT * FROM `register` WHERE email=?";
 
@@ -634,6 +637,11 @@ app.post('/admin/account/edit_sid', async (req, res) => {
     }
 
     res.json(output);
+})
+// 管理餐廳訂位者-------------------------------------------------------------------------
+app.get('/admin/restaurant_account', async (req, res) => {
+
+        res.render('admin_restaurant_account') // 記得這裡要用相對路徑
 })
 //==========================================================================================
 
