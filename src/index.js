@@ -138,6 +138,9 @@ app.get('/try-session', (req, res) => {
 app.get('/course1', (req, res) => {
     res.render('course1');
 });
+app.get('/course2', (req, res) => {
+    res.render('course2');
+});
 // --------------------------------------------------------------------------
 
 
