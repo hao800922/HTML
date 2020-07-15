@@ -45,11 +45,9 @@ const db = require(__dirname + '/db_connect');
 // 呼叫外掛方式的database
 
 const upload_restaurant = require(__dirname + '/upload_restaurant');
-<<<<<<< HEAD
 
-=======
 const upload_products = require(__dirname + '/upload_products');
->>>>>>> 9154ff35b605386f854e954d670921fad97a63dd
+
 // 設定multer比較複雜時, 另外用upload-module.js檔分開裝
 // 用戶端上傳檔案, 會經由外掛js檔處理
 
