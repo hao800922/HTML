@@ -51,7 +51,7 @@
 <%- include('parts/scripts') %>
 <script>
     function formCheck() {
-        const product = new FormData(document.form1);
+        const products = new FormData(document.form2);
         fetch('/products/add', { // 要匹配的路由
             method: 'POST', // 方法
             body: products // 要上傳的內容
