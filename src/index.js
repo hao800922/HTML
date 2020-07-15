@@ -45,7 +45,11 @@ const db = require(__dirname + '/db_connect');
 // 呼叫外掛方式的database
 
 const upload_restaurant = require(__dirname + '/upload_restaurant');
+<<<<<<< HEAD
 
+=======
+const upload_products = require(__dirname + '/upload_products');
+>>>>>>> 9154ff35b605386f854e954d670921fad97a63dd
 // 設定multer比較複雜時, 另外用upload-module.js檔分開裝
 // 用戶端上傳檔案, 會經由外掛js檔處理
 
@@ -138,6 +142,9 @@ app.get('/try-session', (req, res) => {
 app.get('/course1', (req, res) => {
     res.render('course1');
 });
+app.get('/course2', (req, res) => {
+    res.render('course2');
+});
 // --------------------------------------------------------------------------
 
 
@@ -146,7 +153,7 @@ app.get('/products', async (req, res) => {
     const sql = "SELECT * FROM products"
     const [prd] = await db.query(sql);
     if (res.locals.sess.User && res.locals.sess.User.type == 'a') {
-        return res.render('porducts_admin', { wine: prd }) // 記得這裡要用相對路徑
+        return res.render('products_admin', { wine: prd }) // 記得這裡要用相對路徑
     }
     else if (res.locals.sess.User && res.locals.sess.User.type == 'g') {
         return res.render('products_account', { wine: prd }) // 記得這裡要用相對路徑
@@ -154,7 +161,38 @@ app.get('/products', async (req, res) => {
     else
     res.render('products', { wine: prd });
 });
-// --------------------------------------------------------------------------
+// 新增產品----------------------------------------------------------------------
+app.get('/products/add', (req, res) => {
+    res.render('products_add')
+})
+
+app.post('/products/add', upload_products.single('avatar'), async (req, res) => {
+    const output = {
+        success: false,
+        body: req.body,
+    }
+
+    const sql = "INSERT INTO `products` SET ?";
+    const sql2 = "SELECT * FROM `products` WHERE products_no=?";
+
+    const [prd2] = await db.query(sql2, [req.body.products_no]);
+
+    if (prd2.length) {
+        output.error = '此號碼已存在';
+        return res.json(output);
+    }
+
+    const [prd] = await db.query(sql, [req.body]);
+
+    if (prd.affectedRows === 1) {
+        output.success = true;
+    }
+
+    res.json(output);
+})
+
+
+
 
 
 // 場地部分=====================================================================
@@ -191,7 +229,6 @@ app.get('/restaurant_reserve/:restaurant_NO?', async (req, res) => {
         res.render('restaurant_reserve', { rows1: r1, rows2: r2 });
     }
 })
-
 
 app.post('/restaurant_reserve', async (req, res) => {
     const output = {
@@ -249,6 +286,7 @@ app.post('/restaurant/add', upload_restaurant.single('avatar'), async (req, res)
 
     res.json(output);
 })
+
 // 修改餐廳(admin)-----------------------------------------------------
 app.get('/restaurant/edit/:restaurant_NO', async (req, res) => {
 

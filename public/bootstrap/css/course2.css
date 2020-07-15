@@ -1,10 +1,10 @@
-#course1_menu .jumbotron {
+#course2_menu .jumbotron {
     height: 40vh;
     margin-bottom: 0px;
     background: black;
 }
 
-#course1_menu .container {
+#course2_menu .container {
     position: relative;
     top: 50%;
     -webkit-transform: translateY(-50%);
@@ -12,11 +12,11 @@
     transform: translateY(-50%);
 }
 
-#course1_menu .col-md-4 {
+#course2_menu .col-md-4 {
     text-align: center;
 }
 
-#course1_menu .col-md-4 a {
+#course2_menu .col-md-4 a {
     font-size: 28px;
     /* margin: 5px; */
     border: 2px ridge #C6A300;
@@ -27,42 +27,42 @@
     display: inline-block;
 }
 
-#course1_info .container {
+#course2_info .container {
     margin-top: 100px;
 }
 
-#course1_info .lead {
+#course2_info .lead {
     color: #C6A300;
     font-size: 36px;
     font-weight: bold;
 }
 
-#course1_info .c1-intro {
+#course2_info .c2-intro {
     font-weight: bold;
     font-size: 24px;
 }
 
-#course1_info p {
+#course2_info p {
     font-size: 20px;
 }
 
-#course1_info .c1-fee {
+#course2_info .c2-fee {
     color: #C6A300;
     font-weight: 600;
     font-size: 20px;
 }
 
-#course1_show .container {
+#course2_show .container {
     margin-top: 80px;
 }
 
-#course1_show .c1-f1 {
+#course2_show .c2-f1 {
     font-size: 48px;
     color: #C6A300;
     margin-bottom: 50px;
 }
 
-#course1_show h4 {
+#course2_show h4 {
     border: 2px solid #C6A300;
     padding: 50px;
     margin-bottom: 20px;
@@ -70,11 +70,15 @@
     font-size: 28px;
 }
 
-#course1_show .c1-r1 {
+#course2_show .c2-r1 {
     margin-bottom: 30px;
 }
 
-#course1_show .c1-showtext-1 {
+#course2_show .c2-r2 {
+    margin-bottom: 30px;
+}
+
+#course2_show .c2-showtext-1 {
     /* float: left; */
     margin-right: 100px;
     font-weight: bold;
@@ -82,51 +86,38 @@
     display: inline-block;
 }
 
-#course1_show .c1-showtext-2 {
+#course2_show .c2-showtext-2 {
     margin-right: 50px;
     font-weight: bold;
     font-size: 24px;
     display: inline-block;
 }
 
-#course1_show .c1-r2 {
-    margin-bottom: 30px;
-}
-
-#course1_show .c1-show-img{
-    float: left;
-    margin-right: 30px;
-}
-
-#course1_show .c1-showtext-3 {
+#course2_show .c2-showtext-3 {
     font-weight: bold;
     font-size: 28px;
     color: #C6A300;
 }
 
-#course1_show .c1-showtext-4 {
+#course2_show .c2-showtext-4 {
     font-size: 20px;
 }
 
-
-
-#course1_show .c1-r3 img {
+#course2_show .c2-r3 img {
     width: 150px;
 }
 
-#course1_show .c1-r3 .c1-show-img1 {
+#course2_show .c2-r3 .c2-show-img1 {
     margin-right: 30px;
 }
 
-#course1_show .c1-r3 .c1-show-img2 {
+#course2_show .c2-r3 .c2-show-img2 {
     margin-right: 30px;
 }
 
-#course1_show .c1-r3 .c1-show-img3 {
+#course2_show .c2-r3 .c2-show-img3 {
     margin-right: 30px;
 }
-
-
 
 /* -------------------hide------------------- */
 
@@ -136,36 +127,42 @@
 
 /* -------------------hide------------------- */
 
-
-
 @media screen and (max-width:960px) {
-    #course1_menu .col-md-4 {
+    #course2_menu .col-md-4 {
         margin-bottom: 40px;
     }
-    #course1_show .c1-r3 .c1-show-img1 {
+    #course2_show .c2-r3 .c2-show-img1 {
         margin-right: 50px;
     }
-    #course1_show .c1-r3 .c1-show-img3 {
+    #course2_show .c2-r3 .c2-show-img3 {
         margin-right: 50px;
+        margin-top: 50px;
+    }
+    #course2_show .c2-r3 .c2-show-img4 {
         margin-top: 50px;
     }
 }
 
 @media screen and (max-width:414px) {
-    #course1_show .c1-r3 .c1-show-img1 {
+    #course2_show .c2-r3 .c2-show-img1 {
         margin-right: 0px;
         margin-bottom: 30px;
     }
-    #course1_show .c1-r3 .c1-show-img2 {
+    #course2_show .c2-r3 .c2-show-img2 {
         margin-right: 0px;
         margin-bottom: 30px;
     }
-    #course1_show .c1-r3 .c1-show-img3 {
+    #course2_show .c2-r3 .c2-show-img3 {
         margin-right: 0px;
         margin-top: 0px;
         margin-bottom: 30px;
     }
-    #course1_show .col-md-9 {
+    #course2_show .c2-r3 .c2-show-img4 {
+        margin-right: 0px;
+        margin-top: 0px;
+        margin-bottom: 30px;
+    }
+    #course2_show .col-md-9{
         text-align: center;
     }
 }
