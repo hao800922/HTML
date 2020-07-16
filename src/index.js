@@ -216,6 +216,18 @@ app.post('/products/edit', upload_restaurant.single('avatar'), async (req, res) 
     res.json(output);
 })
 
+//產品刪除===============================================================
+app.get('/products/del/:products_no', async (req, res) => {
+    const sql = "DELETE FROM `products` WHERE products_no=?";
+    const [wine] = await db.query(sql, [req.params.products_no]);
+
+    // 刪除後的轉跳畫面
+    if (req.get('Referer')) {
+        res.redirect(req.get('Referer'));
+    } else {
+        res.redirect('/');
+    }
+});
 
 
 // 場地部分=====================================================================
@@ -464,10 +476,8 @@ app.post('/account/edit_info', async (req, res) => {
         body: req.body,
     }
     
-
     const sql = "UPDATE `account` SET ? WHERE sid =?";
     
-
     const [r] = await db.query(sql, [req.body,req.body.sid]);
 
     if (r.changedRows===1) {
