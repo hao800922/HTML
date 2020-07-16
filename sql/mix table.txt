@@ -1,0 +1,1 @@
+SELECT * FROM `restaurant_shoppinglist` LEFT JOIN restaurant ON restaurant_shoppinglist.restaurant_NO = restaurant.restaurant_NO LEFT JOIN account ON restaurant_shoppinglist.sid = account.sid WHERE restaurant.restaurant_NO='r01'
