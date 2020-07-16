@@ -17,10 +17,31 @@
       </nav>
 
       <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">AAA</div>
+        <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">overview</th>
+                <% for(let i of ir) { %>
+                <th scope="col"><%= i %></th>
+                <% } %>
+                
+              </tr>
+            </thead>
+            <tbody>
+              <% for(let q of Y) { %>
+              <tr>
+                <% for(let w of q) { %>
+                <td><%= w[0].name %></td>
+                <% } %>
+              </tr>
+              <% } %>
+              
+            </tbody>
+          </table>
+        </div>
         <% for(let i of A) { %>
         <div class="tab-pane fade" id="nav-<%= i.rno %>" role="tabpanel" aria-labelledby="nav-<%= i.rno %>-tab">
-          <%= i.rows[1].restaurant_title %>
             <table class="table table-striped">
               <thead>
                 <tr>

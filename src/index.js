@@ -475,13 +475,13 @@ app.post('/account/edit_info', async (req, res) => {
 
     const sql = "UPDATE `account` SET ? WHERE sid =?";
 
-    
-    const sql = "UPDATE `account` SET ? WHERE sid =?";
-    
-    const [r] = await db.query(sql, [req.body,req.body.sid]);
 
+    
 
     const [r] = await db.query(sql, [req.body, req.body.sid]);
+
+
+    
 
     if (r.changedRows === 1) {
         output.success = true;
@@ -690,11 +690,11 @@ app.get('/admin/restaurant_account', async (req, res) => {
 
     A = []
     for (let NO of ir) {
-        const [r] = await db.query(sql,[NO]);
+        const [r] = await db.query(sql, [NO]);
         for (i = 0; i < r.length; i++) {
             r[i].date = moment(r[i].date).format('YYYY-MM-DD')
         };
-        A.push({rno: NO, rows: r})
+        A.push({ rno: NO, rows: r })
     }
 
     const sql2 = "SELECT * FROM `restaurant_shoppinglist` ORDER BY date";
@@ -706,23 +706,28 @@ app.get('/admin/restaurant_account', async (req, res) => {
     for (i = 0; i < array.length; i++) {
         array[i] = moment(array[i]).format('YYYY-MM-DD')
     };
-    var ild = array.filter(function(element, index, arr){
+    var ild = array.filter(function (element, index, arr) {
         return arr.indexOf(element) === index;
     }); // index of listdate
-   
-    // X=[]
 
-    // for (i of ir) {
-    //     sql = "SELECT restaurant_shoppinglist.date, restaurant_shoppinglist.rslid, restaurant.restaurant_NO, restaurant.restaurant_title, account.sid, account.name FROM `restaurant_shoppinglist` LEFT JOIN restaurant ON restaurant_shoppinglist.restaurant_NO = restaurant.restaurant_NO LEFT JOIN account ON restaurant_shoppinglist.sid = account.sid WHERE restaurant_shoppinglist.date=? and restaurant.restaurant_NO=?"
-    //     const [r] = await db.query(sql,[i]);
-    //     X.push([])
-    //     }
     
-    
+    Y =[]
+    for (d of ild) {
+        X = [[{name:d}]]
+        for (i of ir) {
+            sql = "SELECT restaurant_shoppinglist.date, restaurant_shoppinglist.rslid, restaurant.restaurant_NO, restaurant.restaurant_title, account.sid, account.name FROM `restaurant_shoppinglist` LEFT JOIN restaurant ON restaurant_shoppinglist.restaurant_NO = restaurant.restaurant_NO LEFT JOIN account ON restaurant_shoppinglist.sid = account.sid WHERE restaurant_shoppinglist.date=? and restaurant.restaurant_NO=?"
+            const [r] = await db.query(sql, [d,i]);
+            if (r.length) {X.push(r)}
+            else {X.push([{name:""}])}
+            
+        }
+        Y.push(X)
+    }
 
 
-    // res.json(ild)
-    res.render('admin_restaurant_account', A) // 記得這裡要用相對路徑
+
+    // res.json(Y[0][2][0].name)
+    res.render('admin_restaurant_account', {A, Y, ir})
 })
 //==========================================================================================
 
