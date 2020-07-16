@@ -5,8 +5,8 @@
     <div class="container" style="  word-break: break-all; margin: 30px auto 10px auto;">
         <div class="card" style="width: 80% ; margin:3% auto 15% auto;">
             <div class="card-body">
-                <h5 class="card-title">新增產品</h5>
-                <form action="/products/add" method="POST" name="form1"
+                <h5 class="card-title">產品修改</h5>
+                <form action="/products/edit" method="POST" name="form1"
                     onsubmit="return formCheck()">
 
                     <div class="form-group">
@@ -52,7 +52,7 @@
 <script>
     function formCheck() {
         const fd = new FormData(document.form1);
-        fetch('/products/add', { // 要匹配的路由
+        fetch('/products/edit', { // 要匹配的路由
             method: 'POST', // 方法
             body: fd // 要上傳的內容
         })
@@ -61,13 +61,13 @@
             .then(data => {       // 再將json進行函數處理
                 console.log(data);
                 if (data.success) {
-                    $('#infobar').text('完成新增');
+                    $('#infobar').text('修改成功');
                     $('#infobar').removeClass('alert-danger').addClass('alert-success');
                     setTimeout(function () {
                         location.href = '/products';
                     }, 3000)
                 } else {
-                    $('#infobar').text(data.error || '新增失敗');
+                    $('#infobar').text(data.error || '沒有修改');
                     $('#infobar').removeClass('alert-success').addClass('alert-danger');
                     setTimeout(function () {
                         $('#infobar').slideUp();

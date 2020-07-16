@@ -8,10 +8,7 @@ const app = express();
 // 在專案下安裝 >npm i express
 // ref https://www.npmjs.com/package/express
 
-
-
 const sha1 = require('sha1');
-
 
 const { v4: uuidv4 } = require('uuid');
 // 引入uuidv4以供使用
@@ -34,7 +31,6 @@ const MysqlStore = require('express-mysql-session')(session);
 // 存在記憶體的session資料, 備份到mysql上面
 // 在專案下安裝 >npm i express-mysql-session
 
-
 const moment = require('moment-timezone')
 // 引入moment-timezone
 // 套件moment-timezone功能:
@@ -51,12 +47,10 @@ const upload_products = require(__dirname + '/upload_products');
 // 設定multer比較複雜時, 另外用upload-module.js檔分開裝
 // 用戶端上傳檔案, 會經由外掛js檔處理
 
-
 const sessionStore = new MysqlStore({}, db)
 // 將session存放在db之中
 // 1. 記得要放在 const db 下面
 // 2. 之所以有{}, 是因為全部用預設值即可
-
 
 app.set('view engine', 'ejs');
 // 啟動ejs_記得還要在專案下建立views資料夾
@@ -68,6 +62,7 @@ app.set('view engine', 'ejs');
 // 在專案下安裝 >npm i ejs
 // vs code 記得安裝模組ESJ language support, 不然會出現語法錯誤提示
 // ref https://www.npmjs.com/package/ejs
+
 
 // Top-level meddleware----------------------------------------------------
 app.use(express.urlencoded({ extended: false }));
@@ -99,11 +94,10 @@ app.use((req, res, next) => {
     res.locals.sess = req.session;
     next()
 })
-//----------------------------------------------------------------------------------
+//---------------------------------------------------------------
 
 
-//=====================================================================================================
-
+//----------------------------------------------------------------------------------------------------------------
 // 模板---------------------------------------------------------
 app.get('/temp', (req, res) => {
     res.render('temp')
@@ -115,7 +109,7 @@ app.get('/', (req, res) => {
     res.locals.pageName = 'home';
     res.render('main');
 });
-//-------------------------------------------------------------
+//---------------------------------------------------------------
 
 // 查詢網站登入次數-------------------------------------------
 app.get('/try-session', (req, res) => {
@@ -189,8 +183,45 @@ app.post('/products/add', upload_products.single('avatar'), async (req, res) => 
     res.json(output);
 })
 
+//產品編輯------------------------------------------------------------
 
+app.get('/products/edit/:products_no', async (req, res) => {
 
+    const sql = "SELECT * FROM `products` WHERE products_no=?";
+    const [prd] = await db.query(sql, [req.params.products_no]);
+
+    res.render('products_edit', { wine: prd[0] })
+})
+
+app.post('/products/edit', upload_restaurant.single('avatar'), async (req, res) => {
+    const output = {
+        success: false,
+        body: req.body,
+        files: req.files,
+    }
+
+    const products = req.body.products_no;
+    const sql = "UPDATE `products` SET ? WHERE products_no=?";
+    const [prd] = await db.query(sql, [req.body, products_no]);
+    if (prd.changedRows === 1) {
+        output.success = true;
+    }
+    output.prd = prd;
+    res.json(output);
+})
+
+//產品刪除===============================================================
+app.get('/products/del/:products_no', async (req, res) => {
+    const sql = "DELETE FROM `products` WHERE products_no=?";
+    const [wine] = await db.query(sql, [req.params.products_no]);
+
+    // 刪除後的轉跳畫面
+    if (req.get('Referer')) {
+        res.redirect(req.get('Referer'));
+    } else {
+        res.redirect('/');
+    }
+});
 
 
 // 場地部分=====================================================================
@@ -439,10 +470,17 @@ app.post('/account/edit_info', async (req, res) => {
         success: false,
         body: req.body,
     }
+<<<<<<< HEAD
 
 
     const sql = "UPDATE `account` SET ? WHERE sid =?";
 
+=======
+    
+    const sql = "UPDATE `account` SET ? WHERE sid =?";
+    
+    const [r] = await db.query(sql, [req.body,req.body.sid]);
+>>>>>>> ba4cbb01d37dc4e3e2319ad4715d905643c4e92c
 
     const [r] = await db.query(sql, [req.body, req.body.sid]);
 
