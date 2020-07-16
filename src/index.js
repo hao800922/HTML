@@ -470,17 +470,16 @@ app.post('/account/edit_info', async (req, res) => {
         success: false,
         body: req.body,
     }
-<<<<<<< HEAD
+
 
 
     const sql = "UPDATE `account` SET ? WHERE sid =?";
 
-=======
     
     const sql = "UPDATE `account` SET ? WHERE sid =?";
     
     const [r] = await db.query(sql, [req.body,req.body.sid]);
->>>>>>> ba4cbb01d37dc4e3e2319ad4715d905643c4e92c
+
 
     const [r] = await db.query(sql, [req.body, req.body.sid]);
 
