@@ -207,12 +207,12 @@ app.post('/products/edit', upload_restaurant.single('avatar'), async (req, res) 
     }
 
     const products = req.body.products_no;
-    const sql = "UPDATE `restaurant` SET ? WHERE products_no=?";
+    const sql = "UPDATE `products` SET ? WHERE products_no=?";
     const [r] = await db.query(sql, [req.body, products_no]);
     if (r.changedRows === 1) {
         output.success = true;
     }
-    output.r = r;
+    output.prd = prd;
     res.json(output);
 })
 
