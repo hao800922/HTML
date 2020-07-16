@@ -157,7 +157,7 @@ app.get('/products', async (req, res) => {
         return res.render('products_account', { wine: prd }) // 記得這裡要用相對路徑
     }
     else
-    res.render('products', { wine: prd });
+        res.render('products', { wine: prd });
 });
 // 新增產品----------------------------------------------------------------------
 app.get('/products/add', (req, res) => {
@@ -343,6 +343,7 @@ app.post('/login', async (req, res) => {
         req.session.User = result[0]; // 將admin匹配到的user資料丟入req.session.User
         output.success = true;
         output.info = '';
+        console.log(req.session.User)
     }
     res.json(output);
 })
@@ -399,8 +400,8 @@ app.get('/account/edit_password/:sid', async (req, res) => {
     const sql1 = "SELECT * FROM `account` WHERE sid=?";
     const [r1] = await db.query(sql1, [req.session.User.sid]);
     r1[0].birthday = moment(r1[0].birthday).format('YYYY-MM-DD')
-    
-    res.render('account_edit_password',{rows1:r1});
+
+    res.render('account_edit_password', { rows1: r1 });
 });
 app.post('/account/edit_password', async (req, res) => {
     const output = {
@@ -408,18 +409,18 @@ app.post('/account/edit_password', async (req, res) => {
         body: req.body,
     }
     if (req.body.password != req.body.test) {
-         output.error = '兩次輸入密碼不同';
+        output.error = '兩次輸入密碼不同';
         return res.json(output);
-    } else {delete req.body.test }
+    } else { delete req.body.test }
 
     const sql = "UPDATE `account` SET ? WHERE sid =?";
     req.body.password = sha1(req.body.password)
 
-    const [r] = await db.query(sql, [req.body,req.body.sid]);
+    const [r] = await db.query(sql, [req.body, req.body.sid]);
 
-    if (r.changedRows===1) {
+    if (r.changedRows === 1) {
         output.success = true;
-        
+
     }
 
     res.json(output);
@@ -430,24 +431,24 @@ app.get('/account/edit_info/:sid', async (req, res) => {
     const sql1 = "SELECT * FROM `account` WHERE sid=?";
     const [r1] = await db.query(sql1, [req.session.User.sid]);
     r1[0].birthday = moment(r1[0].birthday).format('YYYY-MM-DD')
-    
-    res.render('account_edit_info',{rows1:r1});
+
+    res.render('account_edit_info', { rows1: r1 });
 });
 app.post('/account/edit_info', async (req, res) => {
     const output = {
         success: false,
         body: req.body,
     }
-    
+
 
     const sql = "UPDATE `account` SET ? WHERE sid =?";
-    
 
-    const [r] = await db.query(sql, [req.body,req.body.sid]);
 
-    if (r.changedRows===1) {
+    const [r] = await db.query(sql, [req.body, req.body.sid]);
+
+    if (r.changedRows === 1) {
         output.success = true;
-        
+
     }
 
     res.json(output);
@@ -582,7 +583,7 @@ app.get('/admin/account/black_sid/:sid', async (req, res) => {
     const [r1] = await db.query(sql1, [req.params.sid]);
     delete r1[0].sid
     delete r1[0].createtime
-    r1[0].type='b'
+    r1[0].type = 'b'
 
     const [r2] = await db.query(sql2, [r1[0], req.params.sid]);
 
@@ -601,7 +602,7 @@ app.get('/admin/account/white_sid/:sid', async (req, res) => {
     const [r1] = await db.query(sql1, [req.params.sid]);
     delete r1[0].sid
     delete r1[0].createtime
-    r1[0].type='g'
+    r1[0].type = 'g'
 
     const [r2] = await db.query(sql2, [r1[0], req.params.sid]);
 
@@ -617,8 +618,8 @@ app.get('/admin/account/edit_sid/:sid', async (req, res) => {
     const sql1 = "SELECT * FROM `account` WHERE sid=?";
     const [r1] = await db.query(sql1, [req.params.sid]);
     r1[0].birthday = moment(r1[0].birthday).format('YYYY-MM-DD')
-    
-    res.render('admin_account_edit',{rows1:r1});
+
+    res.render('admin_account_edit', { rows1: r1 });
 });
 app.post('/admin/account/edit_sid', async (req, res) => {
     const output = {
@@ -627,12 +628,12 @@ app.post('/admin/account/edit_sid', async (req, res) => {
     }
 
     const sql = "UPDATE `account` SET ? WHERE sid =?";
-    
+
     req.body.password = sha1(req.body.password)
 
-    const [r] = await db.query(sql, [req.body,req.body.sid]);
+    const [r] = await db.query(sql, [req.body, req.body.sid]);
 
-    if (r.changedRows===1) {
+    if (r.changedRows === 1) {
         output.success = true;
     }
 
@@ -641,7 +642,50 @@ app.post('/admin/account/edit_sid', async (req, res) => {
 // 管理餐廳訂位者-------------------------------------------------------------------------
 app.get('/admin/restaurant_account', async (req, res) => {
 
-        res.render('admin_restaurant_account') // 記得這裡要用相對路徑
+    const sql1 = "SELECT * FROM `restaurant`";
+    const [r1] = await db.query(sql1);
+    ir = []
+    for (i = 0; i < r1.length; i++) {
+        ir.push(r1[i].restaurant_NO) // index of restaurant
+    };
+
+    sql = "SELECT restaurant_shoppinglist.date, restaurant_shoppinglist.rslid, restaurant.restaurant_NO, restaurant.restaurant_title, account.sid, account.name FROM `restaurant_shoppinglist` LEFT JOIN restaurant ON restaurant_shoppinglist.restaurant_NO = restaurant.restaurant_NO LEFT JOIN account ON restaurant_shoppinglist.sid = account.sid WHERE restaurant.restaurant_NO=? ORDER BY restaurant_shoppinglist.date"
+
+    A = []
+    for (let NO of ir) {
+        const [r] = await db.query(sql,[NO]);
+        for (i = 0; i < r.length; i++) {
+            r[i].date = moment(r[i].date).format('YYYY-MM-DD')
+        };
+        A.push({rno: NO, rows: r})
+    }
+
+    const sql2 = "SELECT * FROM `restaurant_shoppinglist` ORDER BY date";
+    const [r2] = await db.query(sql2);
+    array = []
+    for (i = 0; i < r2.length; i++) {
+        array.push(r2[i].date)
+    };
+    for (i = 0; i < array.length; i++) {
+        array[i] = moment(array[i]).format('YYYY-MM-DD')
+    };
+    var ild = array.filter(function(element, index, arr){
+        return arr.indexOf(element) === index;
+    }); // index of listdate
+   
+    // X=[]
+
+    // for (i of ir) {
+    //     sql = "SELECT restaurant_shoppinglist.date, restaurant_shoppinglist.rslid, restaurant.restaurant_NO, restaurant.restaurant_title, account.sid, account.name FROM `restaurant_shoppinglist` LEFT JOIN restaurant ON restaurant_shoppinglist.restaurant_NO = restaurant.restaurant_NO LEFT JOIN account ON restaurant_shoppinglist.sid = account.sid WHERE restaurant_shoppinglist.date=? and restaurant.restaurant_NO=?"
+    //     const [r] = await db.query(sql,[i]);
+    //     X.push([])
+    //     }
+    
+    
+
+
+    // res.json(ild)
+    res.render('admin_restaurant_account', A) // 記得這裡要用相對路徑
 })
 //==========================================================================================
 
