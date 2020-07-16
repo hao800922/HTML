@@ -193,7 +193,7 @@ app.post('/products/add', upload_products.single('avatar'), async (req, res) => 
 
 app.get('/products/edit/:products_no', async (req, res) => {
 
-    const sql = "SELECT * FROM `products` WHERE restaurant_NO=?";
+    const sql = "SELECT * FROM `products` WHERE products_no=?";
     const [prd] = await db.query(sql, [req.params.products_no]);
 
     res.render('products_edit', { wine: prd[0] })
@@ -208,8 +208,8 @@ app.post('/products/edit', upload_restaurant.single('avatar'), async (req, res) 
 
     const products = req.body.products_no;
     const sql = "UPDATE `products` SET ? WHERE products_no=?";
-    const [r] = await db.query(sql, [req.body, products_no]);
-    if (r.changedRows === 1) {
+    const [prd] = await db.query(sql, [req.body, products_no]);
+    if (prd.changedRows === 1) {
         output.success = true;
     }
     output.prd = prd;
