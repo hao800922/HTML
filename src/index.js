@@ -189,7 +189,32 @@ app.post('/products/add', upload_products.single('avatar'), async (req, res) => 
     res.json(output);
 })
 
+//產品編輯------------------------------------------------------------
 
+app.get('/products/edit/:products_no', async (req, res) => {
+
+    const sql = "SELECT * FROM `products` WHERE restaurant_NO=?";
+    const [prd] = await db.query(sql, [req.params.products_no]);
+
+    res.render('products_edit', { wine: prd[0] })
+})
+
+app.post('/products/edit', upload_restaurant.single('avatar'), async (req, res) => {
+    const output = {
+        success: false,
+        body: req.body,
+        files: req.files,
+    }
+
+    const products = req.body.products_no;
+    const sql = "UPDATE `restaurant` SET ? WHERE products_no=?";
+    const [r] = await db.query(sql, [req.body, products_no]);
+    if (r.changedRows === 1) {
+        output.success = true;
+    }
+    output.r = r;
+    res.json(output);
+})
 
 
 
