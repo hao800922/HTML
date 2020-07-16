@@ -8,10 +8,7 @@ const app = express();
 // 在專案下安裝 >npm i express
 // ref https://www.npmjs.com/package/express
 
-
-
 const sha1 = require('sha1');
-
 
 const { v4: uuidv4 } = require('uuid');
 // 引入uuidv4以供使用
@@ -34,7 +31,6 @@ const MysqlStore = require('express-mysql-session')(session);
 // 存在記憶體的session資料, 備份到mysql上面
 // 在專案下安裝 >npm i express-mysql-session
 
-
 const moment = require('moment-timezone')
 // 引入moment-timezone
 // 套件moment-timezone功能:
@@ -51,12 +47,10 @@ const upload_products = require(__dirname + '/upload_products');
 // 設定multer比較複雜時, 另外用upload-module.js檔分開裝
 // 用戶端上傳檔案, 會經由外掛js檔處理
 
-
 const sessionStore = new MysqlStore({}, db)
 // 將session存放在db之中
 // 1. 記得要放在 const db 下面
 // 2. 之所以有{}, 是因為全部用預設值即可
-
 
 app.set('view engine', 'ejs');
 // 啟動ejs_記得還要在專案下建立views資料夾
@@ -68,6 +62,7 @@ app.set('view engine', 'ejs');
 // 在專案下安裝 >npm i ejs
 // vs code 記得安裝模組ESJ language support, 不然會出現語法錯誤提示
 // ref https://www.npmjs.com/package/ejs
+
 
 // Top-level meddleware----------------------------------------------------
 app.use(express.urlencoded({ extended: false }));
@@ -99,11 +94,10 @@ app.use((req, res, next) => {
     res.locals.sess = req.session;
     next()
 })
-//----------------------------------------------------------------------------------
+//---------------------------------------------------------------
 
 
-//=====================================================================================================
-
+//----------------------------------------------------------------------------------------------------------------
 // 模板---------------------------------------------------------
 app.get('/temp', (req, res) => {
     res.render('temp')
@@ -115,7 +109,7 @@ app.get('/', (req, res) => {
     res.locals.pageName = 'home';
     res.render('main');
 });
-//-------------------------------------------------------------
+//---------------------------------------------------------------
 
 // 查詢網站登入次數-------------------------------------------
 app.get('/try-session', (req, res) => {
