@@ -584,6 +584,7 @@ app.get('/admin/account', async (req, res) => {
     };
     res.render('admin_account', { rows1: r1, rows2: r2, rows3: r3 })
 })
+
 // (admin)註冊者轉為會員部分--------------------------------------------------------------------
 app.get('/admin/account/add_rid/:rid', async (req, res) => {
     const sql1 = "SELECT * FROM `register` WHERE rid=?";
@@ -681,6 +682,7 @@ app.post('/admin/account/edit_sid', async (req, res) => {
 
     res.json(output);
 })
+
 // 管理餐廳訂位者-------------------------------------------------------------------------
 app.get('/admin/restaurant_account', async (req, res) => {
 
@@ -735,6 +737,12 @@ app.get('/admin/restaurant_account', async (req, res) => {
     res.render('admin_restaurant_account', {A, Y, ir})
 })
 //==========================================================================================
+
+
+
+
+
+
 
 // 下面禁止修改===================================================================================
 
