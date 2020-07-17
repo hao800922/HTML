@@ -31,6 +31,10 @@
     margin-top: 100px;
 }
 
+#course1_info img{
+    margin-top: 10px;
+}
+
 #course1_info .lead {
     color: #C6A300;
     font-size: 36px;
@@ -75,7 +79,7 @@
 }
 
 #course1_show .c1-showtext-1 {
-    /* float: left; */
+    float: left;
     margin-right: 100px;
     font-weight: bold;
     font-size: 24px;
@@ -97,22 +101,30 @@
 
 #course1_show .slides {
     position: relative;
-    width: 900px;
+    width: 825px;
     height: 350px;
-    /* overflow: hidden; */
     /* margin: 0 auto; */
 }
 
-#course1_show .slides-set{
-    width: 3600px;
+#course1_show .slide1{
+    position: absolute;
+    width: 825px;
     height: 350px;
 }
 
-#course1_show .slide1+.slide2+.slide3{
-    width: 900px;
+#course1_show .slide2{
+    position: absolute;
+    visibility: hidden;
+    width: 825px;
     height: 350px;
-    float: left;
 }
+
+#course1_show .slide3{
+    visibility: hidden;
+    width: 825px;
+    height: 350px;
+}
+
 
 #course1_show .c1-show-img {
     float: left;
@@ -136,19 +148,13 @@
     /* bottom: 10px; */
 }
 
-#course1_show .slide2 {
-    clear: left;
-}
-
-#course1_show .slide3 {
-    clear: left;
-}
-
 #course1_show .dot img {
     width: 150px;
     margin-top: 30px;
     border: 2px inset #C6A300;
     padding: 2px;
+    transform: scale(1,1);
+    transition: all 0.2s ease-out;
 }
 
 #course1_show .c1-show-img2 {
@@ -156,28 +162,11 @@
     margin-right: 30px;
 }
 
-
-
-
-
-
-/* ----------------暫無---------------- */
-
-#course1_show .c1-r3 img {
-    width: 150px;
+#course1_show .dot img:hover{
+    transform: scale(1.1,1.1);
 }
 
-#course1_show .c1-r3 .c1-show-img1 {
-    margin-right: 30px;
-}
 
-#course1_show .c1-r3 .c1-show-img2 {
-    margin-right: 30px;
-}
-
-#course1_show .c1-r3 .c1-show-img3 {
-    margin-right: 30px;
-}
 
 /* -------------------hide------------------- */
 
@@ -186,6 +175,9 @@
 }
 
 /* -------------------hide------------------- */
+
+
+
 
 @media screen and (max-width:960px) {
     #course1_menu .col-md-4 {
