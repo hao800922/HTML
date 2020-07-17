@@ -2,32 +2,77 @@
 <%- include('parts/navbar') %>
 
 <article>
-    <div class="container" style="height: 800px ; word-break: break-all; ;">
-        <div class="card" style="width: 100% ; margin: 3% auto 10% auto;">
-            
-            <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                  <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Home</a>
-                  <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</a>
-                  <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</a>
-                </div>
-              
-              <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                    <div id="reserve" style="margin: 3%;">
-                        <h3>審核註冊者</h3>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
-                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
-              </div>
-            </nav>
+  <div class="container" style="height: 800px ; word-break: break-all; ;">
+    <div class="card" style="width: 100% ; margin: 3% auto 10% auto;">
 
-
-            
-            
+      <nav>
+        <div class="nav nav-tabs " id="nav-tab" role="tablist">
+          <a class="nav-item nav-link active " id="nav-all-tab" data-toggle="tab" href="#nav-all" role="tab"
+            aria-controls="nav-all" aria-selected="true">all</a>
+          <% for(let i of A) { %>
+          <a class="nav-item nav-link" id="nav-<%= i.rno %>-tab" data-toggle="tab" href="#nav-<%= i.rno %>" role="tab"
+            aria-controls="nav-<%= i.rno %>" aria-selected="true"><%= i.rno %></a>
+          <% } %>
         </div>
+      </nav>
+
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">overview</th>
+                <% for(let i of ir) { %>
+                <th scope="col"><%= i %></th>
+                <% } %>
+                
+              </tr>
+            </thead>
+            <tbody>
+              <% for(let q of Y) { %>
+              <tr>
+                <% for(let w of q) { %>
+                <td><%= w[0].name %></td>
+                <% } %>
+              </tr>
+              <% } %>
+              
+            </tbody>
+          </table>
+        </div>
+        <% for(let i of A) { %>
+        <div class="tab-pane fade" id="nav-<%= i.rno %>" role="tabpanel" aria-labelledby="nav-<%= i.rno %>-tab">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">日期</th>
+                  <th scope="col">帳號</th>
+                  <th scope="col">表單編號</th>
+                  <th><i class="far fa-trash-alt"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for(let a of i.rows) { %>
+                <tr>
+                  <td><%= a.date %></td>
+                  <td><%= a.name %></td>
+                  <td><%= a.rslid %></td>
+                  <th><a href="/shopping/del_restaurant/<%= a.rslid %>"><i class="far fa-trash-alt"></i></a></th>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+        </div>
+        <% } %>
+      </div>
+
+
+
+
+
+
     </div>
+  </div>
 </article>
 
 
