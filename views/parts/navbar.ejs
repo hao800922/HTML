@@ -19,18 +19,18 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark;" style="background-color: black;">
     <a class="navbar-brand" href="/">
       <div style="font-size: 1.7em; font-family: 'Galada', cursive;">
-      Liqueur~
-      <!--   <img src="/img/logo.jpg" class="d-block w-100" alt="...">圖片版本 --> 
+        Liqueur~
+        <!--   <img src="/img/logo.jpg" class="d-block w-100" alt="...">圖片版本 -->
       </div></i>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon" ></span>
+      <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        
+
         <li class="nav-item " style="margin-right: 10px;">
           <a class="nav-link" href="/course1" style="font-size: 1.3em;">課程報名</a>
         </li>
@@ -51,10 +51,12 @@
         </li>
 
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 1.3em;">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false" style="font-size: 1.3em;">
             會員中心
           </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: black; border: 1px gray solid;">
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown"
+            style="background-color: black; border: 1px gray solid;">
             <a class="dropdown-item" href="/account/edit_info/<%= sess.User.sid %>" style="color:gray;">更改會員資料 </a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="/account/edit_password/<%= sess.User.sid %>" style="color:gray;">更改密碼 </a>
@@ -70,24 +72,26 @@
         </li>
         <% } else if(sess.User && sess.User.type=="a") { %>
 
-          <li class="nav-item ">
-            <a class="nav-link" href="#" style="font-size: 1.3em;">admin</a>
-          </li>
+        <li class="nav-item ">
+          <a class="nav-link" href="#" style="font-size: 1.3em;">admin</a>
+        </li>
 
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 1.3em;">
-              管理者專區
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: black; border: 1px gray solid;">
-              <a class="dropdown-item" href="/admin/account" style="color:gray;">帳號管理</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#" style="color:gray;">課程管理 </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#" style="color:gray;">商品管理 </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/admin/restaurant_account" style="color:gray;">場地管理 </a>
-            </div>
-          </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false" style="font-size: 1.3em;">
+            管理者專區
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown"
+            style="background-color: black; border: 1px gray solid;">
+            <a class="dropdown-item" href="/admin/account" style="color:gray;">帳號管理</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" style="color:gray;">課程管理 </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" style="color:gray;">商品管理 </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/admin/restaurant_account" style="color:gray;">場地管理 </a>
+          </div>
+        </li>
 
 
         <li class="nav-item ">
