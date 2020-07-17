@@ -137,6 +137,9 @@ app.get('/course1', (req, res) => {
 app.get('/course2', (req, res) => {
     res.render('course2');
 });
+app.get('/course3', (req, res) => {
+    res.render('course3');
+});
 // --------------------------------------------------------------------------
 app.get('/member_benefit', async (req, res) => {
     res.render('member_benefit');
