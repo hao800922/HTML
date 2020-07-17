@@ -138,7 +138,12 @@ app.get('/course2', (req, res) => {
     res.render('course2');
 });
 // --------------------------------------------------------------------------
-
+app.get('/member_benefit', async (req, res) => {
+    res.render('member_benefit');
+});
+app.get('/member_creditcard', async (req, res) => {
+    res.render('member_benefit');
+});
 
 // 產品------------------------------------------------------------------
 app.get('/products', async (req, res) => {
