@@ -12,19 +12,47 @@
             <h2>購物車</h2>
 
             <div class="card-body">
-                <h2>商品</h2>
+                <h2>產品</h2>
+                <table class="table table-striped" style="border: 2px black solid">
+                    <thead>
+                        <tr>
+                            <th scope="col">訂單日期</th>
+                            <th scope="col">產品名稱</th>
+                            <th scope="col">預計送達日期</th>
+                            <th scope="col">數量</th>
+                            <th scope="col">價錢</th>
+                            <th scope="col"><i class="fas fa-trash-alt"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        <% for(let prd of wine2){ %>
+                        <tr>
+                            <td><%= prd.createtime %></td>
+                            <td><%= wine1[pir.indexOf(prd.products_no)].products_name %></td>
+                            <td><%= prd.date %></td>
+                            <td><form action=""><input type="number" value="<%= prd.num %>" style='width:10%;'></form></td>
+                            <td><%= wine1[pir.indexOf(prd.products_no)].products_price %></td>
+                            <td>
+                                <a href="/shopping/del_restaurant/<%= prd.rslid %>">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+
+                        </tr>
+                        <% } %>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>總計</td>
+                            <td><%= ptpr %></td>
+                            <td>元</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-
-
-
-
-
-            <div class="card-body">
-                <h2>課程</h2>
-
-            </div>
-
-
 
             <div class="card-body">
                 <h2>包場</h2>
@@ -66,8 +94,6 @@
                             <td><%= tpr %></td>
                             <td>元</td>
                         </tr>
-
-
                     </tbody>
                 </table>
             </div>

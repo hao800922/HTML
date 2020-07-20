@@ -200,7 +200,7 @@ app.get('/products/edit/:products_no', async (req, res) => {
     res.render('products_edit', { wine: prd[0] })
 })
 
-app.post('/products/edit', upload_restaurant.single('avatar'), async (req, res) => {
+app.post('/products/edit', upload_products.single('avatar'), async (req, res) => {
     const output = {
         success: false,
         body: req.body,
@@ -217,10 +217,39 @@ app.post('/products/edit', upload_restaurant.single('avatar'), async (req, res) 
     res.json(output);
 })
 
+//產品訂購------------------------------------------------------------
+app.get('/products_reserve/:products_no?', async (req, res) => {
+    const sql1 = "SELECT * FROM `products` WHERE products_no=?";
+    const sql2 = "SELECT * FROM `products_shoppinglist` WHERE `products_no`=? "
+
+    const [prd1] = await db.query(sql1, [req.params.products_no]);
+    const [prd2] = await db.query(sql2, [req.params.products_no]);
+
+    for (prd = 0; prd < prd2.length; prd++) {
+        prd2[prd].date = moment(prd2[prd].date).format('YYYY-MM-DD')
+    }
+
+
+    if (prd1.length) {
+        res.render('products_reserve', { wine1: prd1, wine2: prd2 });
+    }
+})
+
+app.post('/products_reserve', async (req, res) => {
+    const output = {
+        success: false,
+        body: req.body,
+    }
+
+    const sql1 = "SELECT * FROM `products_shoppinglist` WHERE `products_no` LIKE ? AND `rsid` = ? AND `date` = ?";
+    const sql2 = "INSERT INTO `products_shoppinglist` SET ?";
+
+    const [prd1] = await db.query(sql1, [req.body.products_no, res.locals.sess.User.sid, req.body.date]);
+
 //產品刪除===============================================================
 app.get('/products/del/:products_no', async (req, res) => {
     const sql = "DELETE FROM `products` WHERE products_no=?";
-    const [wine] = await db.query(sql, [req.params.products_no]);
+    const [r] = await db.query(sql, [req.params.products_no]);
 
     // 刪除後的轉跳畫面
     if (req.get('Referer')) {
@@ -229,6 +258,23 @@ app.get('/products/del/:products_no', async (req, res) => {
         res.redirect('/');
     }
 });
+
+
+    // if (r1.length) {
+    //     output.error = '';
+    //     return res.json(output);
+    // }
+
+    req.body.sid = res.locals.sess.User.sid
+    req.body.status = 'u'
+    const [prd2] = await db.query(sql2, [req.body]);
+
+    if (prd2.affectedRows === 1 && prd2.insertId) {
+        output.success = true;
+    }
+
+    res.json(output);
+})
 
 
 // 場地部分=====================================================================
@@ -501,18 +547,33 @@ app.post('/account/edit_info', async (req, res) => {
 
 
 // 購物車======================================================================
-// 購物車_產品部分--------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-
-
-// 購物車_課程部分--------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-
-
 // 購物車_場地部分--------------------------------------------------------------
 app.get('/shopping', async (req, res) => {
+
+    const sql3 = "SELECT * FROM `products`";
+    const sql4 = "SELECT * FROM `products_shoppinglist` WHERE `sid`=? and `status`='u' ORDER BY `date`";
+    const [prd2] = await db.query(sql4, [res.locals.sess.User.sid]);
+    const [prd1] = await db.query(sql3);
+
+    for (prd = 0; prd < prd2.length; prd++) {
+        prd2[prd].date = moment(prd2[prd].date).format('YYYY-MM-DD')
+    };
+
+    for (prd = 0; prd < prd2.length; prd++) {
+        prd2[prd].createtime = moment(prd2[prd].createtime).format('YYYY-MM-DD hh:mm')
+    };
+
+    pir = []
+    for (prd = 0; prd < prd1.length; prd++) {
+        pir.push(prd1[prd].products_no)
+    };
+
+    ptpr = 0
+    for (prd = 0; prd < prd2.length; prd++) {
+        ptpr += prd1[pir.indexOf(prd2[prd].products_no)].products_price * prd2[prd].num
+    };
+
+    
     const sql1 = "SELECT * FROM `restaurant`";
     const sql2 = "SELECT * FROM `restaurant_shoppinglist` WHERE `sid`=? and `status`='u' ORDER BY `date`";
     const [r2] = await db.query(sql2, [res.locals.sess.User.sid]);
@@ -536,9 +597,20 @@ app.get('/shopping', async (req, res) => {
         tpr += r1[ir.indexOf(r2[i].restaurant_NO)].restaurant_price
     };
 
-    res.render('shopping', { rows2: r2, rows1: r1, ir, tpr })
+    res.render('shopping', { rows2: r2, rows1: r1, ir, tpr ,wine2: prd2, wine1: prd1, pir, ptpr})
 })
 // 購物車場地刪除部分-----------------------------------------------------------------------
+app.get('/shopping/del_products/:rsid', async (req, res) => {
+    const sql = "DELETE FROM `products_shoppinglist` WHERE rsid=?";
+    const [prd] = await db.query(sq3, [req.params.rsid]);
+
+    if (req.get('Referer')) {
+        res.redirect(req.get('Referer'));
+    } else {
+        res.redirect('/');
+    }
+});
+
 app.get('/shopping/del_restaurant/:rslid', async (req, res) => {
     const sql = "DELETE FROM `restaurant_shoppinglist` WHERE rslid=?";
     const [r] = await db.query(sql, [req.params.rslid]);

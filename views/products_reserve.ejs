@@ -1,0 +1,117 @@
+<%- include('parts/html-head') %>
+<%- include('parts/navbar') %>
+
+<article>
+    <div class="container" style="height: 800px ; word-break: break-all; margin: 10px auto 10px auto;">
+        <div class="card" style="width: 80% ; margin: 10% auto;">
+            <div id="reserveprd" style="margin: 3%;">
+            <table class="table table-striped" style="border: 2px black solid">
+                <thead>
+                    <tr>
+                        <th scope="col">訂購日期</th>
+                        <th scope="col">產品編號</th>
+                        <th scope="col">產品名稱</th>
+                        <th scope="col">聯絡人</th>
+                        <th scope="col">聯絡人電話</th>
+                        <th scope="col">產品數量</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <% for(let prd of wine2){ %>
+
+                    <tr>
+                        <td><%= prd.date%></td>
+                        <td><%= prd.products_no%></td>
+                        <td><%= prd.products_name%></td>
+                        <td><%= prd.contactperson %></td>
+                        <td><%= prd.contactphone %></td>
+                        <td><%= prd.num %></td>
+                    </tr>
+
+                    <% } %>
+
+                </tbody>
+            </table>
+        </div>
+
+
+            <% for(let prd of wine1) { %>
+
+            
+            <form method="post" name="form1" onsubmit="return checkForm()" style="margin-left: 5%; ">
+
+                <div class="form-group">
+                    <label for="products_no">產品編號</label><br>
+                    <select name="products_no" id="products_no">
+                        <option value="<%= prd.products_no %>"><%= prd.porducts_no %></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="products_name">產品名稱</label><br>
+                    <select name="products_name" id="products_name">
+                        <option value="<%= prd.products_name %>"><%= prd.porducts_name %></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">希望到達日期</label>
+                    <input type="date" class="form-control" id="date" name="date" style="width: 30%;" onchange="test()">
+                </div>
+
+                <div class="form-group">
+                    <label for="contactperson">訂購人</label>
+                    <input type="text" class="form-control" id="contactperson" name="contactperson" style="width: 30%;"
+                        onchange="test()">
+                </div>
+
+                <div class="form-group">
+                    <label for="contactphone">訂購人電話</label>
+                    <input type="text" class="form-control" id="contactphone" name="contactphone" style="width: 30%;"
+                        onchange="test()">
+                </div>
+
+                <div class="form-group">
+                    <label for="num">訂購數量</label>
+                    <input type="text" class="form-control" id="num" name="num" style="width: 30%;"
+                        onchange="test()">
+                </div>
+
+                <button type="submit" class="btn btn-primary">加入購物車</button>
+            </form>
+            <div id="infobar" class="alert alert-success" role="alert" style="display: none"></div>
+
+        <% } %>
+        
+    </div>
+</article>
+
+
+<%- include('parts/scripts') %>
+<script>
+    function checkForm() {
+        // Ajax
+        $.post('/products_reserve', $(document.form1).serialize(), function (data) {
+            console.log(data);
+
+            if (data.success) {
+                $('#infobar').text('已加入購物車');
+                $('#infobar').removeClass('alert-danger').addClass('alert-success');
+                $("#reserve").load(location.href+" #reserveprd" ) // 刷新DIV
+                setTimeout(function () {
+                    location.href = '/products';
+                }, 3000)
+            } else {
+                $('#infobar').text(data.error || '新增失敗');
+                $('#infobar').removeClass('alert-success').addClass('alert-danger');
+                setTimeout(function () {
+                    $('#infobar').slideUp();
+                }, 3000)
+            }
+            $('#infobar').slideDown();
+        }, 'json');
+        return false; // 阻斷轉跳
+    }
+</script>
+<%- include('parts/html-foot') %>
