@@ -11,8 +11,8 @@
                         <th scope="col">訂購日期</th>
                         <th scope="col">產品編號</th>
                         <th scope="col">產品名稱</th>
-                        <th scope="col">聯絡人</th>
-                        <th scope="col">聯絡人電話</th>
+                        <th scope="col">訂購人</th>
+                        <th scope="col">訂購人電話</th>
                         <th scope="col">產品數量</th>
                     </tr>
                 </thead>
@@ -44,14 +44,14 @@
                 <div class="form-group">
                     <label for="products_no">產品編號</label><br>
                     <select name="products_no" id="products_no">
-                        <option value="<%= prd.products_no %>"> <%= prd.porducts_no %> </option>
+                        <option value="<%= prd.products_no %>"> <%= prd.products_no %> </option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="products_name">產品名稱</label><br>
                     <select name="products_name" id="products_name">
-                        <option value="<%= prd.products_name %>"> <%= prd.porducts_name %> </option>
+                        <option value="<%= prd.products_name %>"> <%= prd.products_name %> </option>
                     </select>
                 </div>
 
@@ -74,7 +74,7 @@
 
                 <div class="form-group">
                     <label for="num">訂購數量</label>
-                    <input type="text" class="form-control" id="num" name="num" style="width: 30%;"
+                    <input type="number" class="form-control" id="num" name="num" style="width: 30%;"
                         onchange="test()">
                 </div>
 
