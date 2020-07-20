@@ -160,7 +160,6 @@ app.get('/products', async (req, res) => {
     else
         res.render('products', { wine: prd });
 });
-// 新增產品----------------------------------------------------------------------
 app.get('/products/add', (req, res) => {
     res.render('products_add')
 })
@@ -200,7 +199,7 @@ app.get('/products/edit/:products_no', async (req, res) => {
     res.render('products_edit', { wine: prd[0] })
 })
 
-app.post('/products/edit', upload_products.single('avatar'), async (req, res) => {
+app.post('/products/edit', upload_restaurant.single('avatar'), async (req, res) => {
     const output = {
         success: false,
         body: req.body,
@@ -216,6 +215,19 @@ app.post('/products/edit', upload_products.single('avatar'), async (req, res) =>
     output.prd = prd;
     res.json(output);
 })
+
+//產品刪除===============================================================
+app.get('/products/del/:products_no', async (req, res) => {
+    const sql = "DELETE FROM `products` WHERE products_no=?";
+    const [wine] = await db.query(sql, [req.params.products_no]);
+
+    // 刪除後的轉跳畫面
+    if (req.get('Referer')) {
+        res.redirect(req.get('Referer'));
+    } else {
+        res.redirect('/');
+    }
+});
 
 //產品訂購------------------------------------------------------------
 app.get('/products_reserve/:products_no?', async (req, res) => {
@@ -246,24 +258,10 @@ app.post('/products_reserve', async (req, res) => {
 
     const [prd1] = await db.query(sql1, [req.body.products_no, res.locals.sess.User.sid, req.body.date]);
 
-//產品刪除===============================================================
-app.get('/products/del/:products_no', async (req, res) => {
-    const sql = "DELETE FROM `products` WHERE products_no=?";
-    const [r] = await db.query(sql, [req.params.products_no]);
-
-    // 刪除後的轉跳畫面
-    if (req.get('Referer')) {
-        res.redirect(req.get('Referer'));
-    } else {
-        res.redirect('/');
+    if (prd1.length) {
+        output.error = '';
+        return res.json(output);
     }
-});
-
-
-    // if (r1.length) {
-    //     output.error = '';
-    //     return res.json(output);
-    // }
 
     req.body.sid = res.locals.sess.User.sid
     req.body.status = 'u'
@@ -275,6 +273,7 @@ app.get('/products/del/:products_no', async (req, res) => {
 
     res.json(output);
 })
+
 
 
 // 場地部分=====================================================================
@@ -602,7 +601,7 @@ app.get('/shopping', async (req, res) => {
 // 購物車場地刪除部分-----------------------------------------------------------------------
 app.get('/shopping/del_products/:rsid', async (req, res) => {
     const sql = "DELETE FROM `products_shoppinglist` WHERE rsid=?";
-    const [prd] = await db.query(sq3, [req.params.rsid]);
+    const [prd] = await db.query(sql, [req.params.rsid]);
 
     if (req.get('Referer')) {
         res.redirect(req.get('Referer'));

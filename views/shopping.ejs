@@ -32,10 +32,10 @@
                             <td><%= prd.createtime %></td>
                             <td><%= wine1[pir.indexOf(prd.products_no)].products_name %></td>
                             <td><%= prd.date %></td>
-                            <td><form action=""><input type="number" value="<%= prd.num %>" style='width:10%;'></form></td>
+                            <td><form action=""><input type="number" value="<%= prd.num %>" style='width:15%;'></form></td>
                             <td><%= wine1[pir.indexOf(prd.products_no)].products_price %></td>
                             <td>
-                                <a href="/shopping/del_restaurant/<%= prd.rslid %>">
+                                <a href="/shopping/del_products/<%= prd.rsid %>">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             </td>
