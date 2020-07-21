@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2020-07-17 04:01:32
+-- 產生時間： 2020-07-21 02:58:01
 -- 伺服器版本： 8.0.20
--- PHP 版本： 7.3.19
+-- PHP 版本： 7.4.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,7 +20,7 @@ SET time_zone = "+00:00";
 --
 -- 資料庫： `project_1`
 --
-CREATE DATABASE IF NOT EXISTS `project_1` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE IF NOT EXISTS `project_1` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `project_1`;
 
 -- --------------------------------------------------------
@@ -72,10 +72,37 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`products_no`, `products_name`, `products_imformation_alc`, `products_imformation`, `products_price`) VALUES
-('p01', 'whisky', '48%', '', 2000),
-('p02', 'Red Wine', '15%', '', 2000),
-('p03', 'Beer', '5%', '', 100),
-('p07', '2222', '2222', '', 2222);
+('p01', 'whisky', '55%', '齁拎', 2000),
+('p02', 'beer', '5%', '消暑', 100);
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `products_shoppinglist`
+--
+
+DROP TABLE IF EXISTS `products_shoppinglist`;
+CREATE TABLE `products_shoppinglist` (
+  `rsid` int NOT NULL,
+  `products_no` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `sid` int NOT NULL,
+  `date` date NOT NULL,
+  `contactperson` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `contactphone` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `createtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `num` varchar(3) COLLATE utf8mb4_general_ci NOT NULL,
+  `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `products_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 傾印資料表的資料 `products_shoppinglist`
+--
+
+INSERT INTO `products_shoppinglist` (`rsid`, `products_no`, `sid`, `date`, `contactperson`, `contactphone`, `createtime`, `num`, `status`, `products_name`) VALUES
+(7, 'p02', 1, '2020-07-25', '林奕廷', '0966666666', '2020-07-20 22:16:02', '2', 'u', 'beer'),
+(8, 'p01', 1, '2020-07-25', '林奕廷', '0966666666', '2020-07-20 22:16:19', '4', 'u', 'whisky'),
+(9, 'p02', 1, '2020-07-08', '12312', '0966666667', '2020-07-20 23:42:56', '6', 'u', 'beer');
 
 -- --------------------------------------------------------
 
@@ -151,7 +178,6 @@ CREATE TABLE `restaurant_shoppinglist` (
 --
 
 INSERT INTO `restaurant_shoppinglist` (`rslid`, `restaurant_NO`, `sid`, `date`, `partyname`, `contactperson`, `contactphone`, `status`, `createtime`) VALUES
-(4, 'r02', 1, '2020-07-24', '舞會', 'ken', '0922222222', 'u', '2020-07-11 15:55:58'),
 (5, 'r01', 1, '2020-07-30', '畢業舞會', 'vicky', '0912345678', 'u', '2020-07-11 16:54:03'),
 (19, 'r03', 4, '2020-07-24', '聚餐', 'vicky', '0912345678', 'u', '2020-07-15 20:26:06'),
 (20, 'r03', 4, '2020-07-31', '聚餐', 'vicky', '0933445566', 'u', '2020-07-15 20:26:33'),
@@ -180,6 +206,7 @@ CREATE TABLE `sessions` (
 
 INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
 ('1VZCmITbR0PCQ3FGTi5oE5wO4abMdsTt', 1596104465, '{\"cookie\":{\"originalMaxAge\":1200000000,\"expires\":\"2020-07-30T10:18:54.350Z\",\"httpOnly\":true,\"path\":\"/\"},\"User\":{\"sid\":2,\"email\":\"admin@gmail.com\",\"password\":\"40bd001563085fc35165329ea1ff5c5ecbdbbeef\",\"name\":\"admin\",\"birthday\":\"2020-06-16T16:00:00.000Z\",\"phone\":\"0922222222\",\"type\":\"a\",\"createtime\":\"2020-07-08T01:57:45.000Z\"}}'),
+('GtehKpADzud2C2zz5YtpdPVDPcPwCI6p', 1596460914, '{\"cookie\":{\"originalMaxAge\":1200000000,\"expires\":\"2020-08-03T12:56:59.265Z\",\"httpOnly\":true,\"path\":\"/\"},\"User\":{\"sid\":1,\"email\":\"john@gmail.com\",\"password\":\"40bd001563085fc35165329ea1ff5c5ecbdbbeef\",\"name\":\"John\",\"birthday\":\"2020-06-16T16:00:00.000Z\",\"phone\":\"0911111111\",\"type\":\"g\",\"createtime\":\"2020-07-08T01:56:07.000Z\"}}'),
 ('OHullWb6Z7Qn-1WCyNOjcOffHuFW6jZ6', 1596033770, '{\"cookie\":{\"originalMaxAge\":1199999999,\"expires\":\"2020-07-29T14:42:12.790Z\",\"httpOnly\":true,\"path\":\"/\"},\"User\":{\"sid\":2,\"email\":\"admin@gmail.com\",\"password\":\"40bd001563085fc35165329ea1ff5c5ecbdbbeef\",\"name\":\"admin\",\"birthday\":\"2020-06-16T16:00:00.000Z\",\"phone\":\"0922222222\",\"type\":\"a\",\"createtime\":\"2020-07-08T01:57:45.000Z\"}}');
 
 --
@@ -197,6 +224,12 @@ ALTER TABLE `account`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`products_no`);
+
+--
+-- 資料表索引 `products_shoppinglist`
+--
+ALTER TABLE `products_shoppinglist`
+  ADD PRIMARY KEY (`rsid`);
 
 --
 -- 資料表索引 `register`
@@ -231,6 +264,12 @@ ALTER TABLE `sessions`
 --
 ALTER TABLE `account`
   MODIFY `sid` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `products_shoppinglist`
+--
+ALTER TABLE `products_shoppinglist`
+  MODIFY `rsid` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `register`
